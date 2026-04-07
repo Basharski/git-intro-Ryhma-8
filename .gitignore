@@ -3,3 +3,21 @@
 
 # Windows image cache
 Thumbs.db
+
+# Python virtuaaliympäristö
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Robot Framework testituotokset
+outputs/output.xml
+outputs/log.html
+outputs/report.html
+
+# Node
+node_modules/
+
+# VS Code
+.vscode/

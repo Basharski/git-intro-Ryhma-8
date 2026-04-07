@@ -1,0 +1,7 @@
+# Robot Framework ja lisäkirjastot
+# Asenna: pip install -r requirements.txt
+robotframework>=7.2
+robotframework-browser>=19.3.0
+robotframework-requests>=0.9.7
+robotframework-crypto>=0.4.2
+robotframework-tidy>=4.16.0
