@@ -1,5 +1,5 @@
-# OSX stuff
+node_modules/
 .DS_Store
-
-# Windows image cache
-Thumbs.db
+.env
+secret-requests.http
+.vscode

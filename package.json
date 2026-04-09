@@ -1,0 +1,40 @@
+{
+  "name": "tues",
+  "version": "1.0.0",
+  "description": "1. [Material](git-basics.md) 2. [Exercises](exercises.md)",
+  "homepage": "https://github.com/Basharski/git-intro-Ryhma-8#readme",
+  "bugs": {
+    "url": "https://github.com/Basharski/git-intro-Ryhma-8/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Basharski/git-intro-Ryhma-8.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "backend/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon backend/src/index.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
+    "nodemon": "^3.1.14",
+    "prettier": "3.8.1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.0",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.20.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^13.0.0"
+  }
+}
