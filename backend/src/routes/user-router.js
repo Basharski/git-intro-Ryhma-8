@@ -1,7 +1,7 @@
 import express from 'express';
 import {authenticateToken} from '../middlewares/authentication.js';
 import {postLogin, getMe} from '../controllers/kubios-auth-controller.js';
-import {getUserDataById} from '../controllers/user-data-controller.js'
+import {getUserDataById, updateUserProfile} from '../controllers/user-controller.js'
 
 const userRouter = express.Router();
 
@@ -11,7 +11,7 @@ userRouter.post('/login', postLogin);
 // Get and update users data
 userRouter
   .get('/profile', authenticateToken, getUserDataById)
-  //.put('/profile', authenticateToken, updateUserProfileById);
+  .patch('/profile', authenticateToken, updateUserProfile);
 
 // Get user info based on token
 userRouter.get('/me', authenticateToken, getMe);

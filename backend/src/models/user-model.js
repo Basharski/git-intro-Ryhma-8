@@ -41,7 +41,8 @@ const selectUserByEmail = async (email) => {
 
 const selectUserById = async (id) => {
   try {
-    const sql = 'SELECT name, email, height, weight, date_of_birth FROM Users WHERE id=?';
+    const sql =
+      'SELECT name, email, height, weight, date_of_birth FROM Users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     console.log(rows);
@@ -57,8 +58,21 @@ const selectUserById = async (id) => {
   }
 };
 
-export {
-  addUser,
-  selectUserByEmail,
-  selectUserById,
+const updateUserDataById = async (userId, data) => {
+  const fields = []
+  const params = []
+
+  for (const [key, value] of Object.entries(data)) {
+    fields.push(`${key} = ?`);
+    params.push(value)
+  }
+
+  const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+  params.push(userId)
+
+  const [result] = promisePool.execute(sql, params);
+
+  return result.affectedRows > 0;
 };
+
+export {addUser, selectUserByEmail, selectUserById, updateUserDataById};
