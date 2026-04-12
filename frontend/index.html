@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terveyssovellus</title>
+    <link rel="stylesheet" href="src/css/style.css" />
+    <style>
+      /* Tiny loading indicator */
+      body { display:flex; align-items:center; justify-content:center; height:100vh; }
+      .loader { font-size: 1.1rem; color: var(--color-primary); }
+    </style>
+  </head>
+  <body>
+    <div class="loader">Ladataan…</div>
+    <script type="module">
+      import { isLoggedIn, applyTheme } from './src/js/api.js';
+      applyTheme();
+      if (isLoggedIn()) {
+        window.location.replace('./src/home/index.html');
+      } else {
+        window.location.replace('./src/auth/login.html');
+      }
+    </script>
+  </body>
+</html>
