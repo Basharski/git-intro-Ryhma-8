@@ -63,7 +63,7 @@ const kubiosLogin = async (username, password) => {
   const location = response.headers.raw().location[0];
   // console.log(location);
   // If login fails, location contains 'login?null'
-  console.log('Kubios Location Header:', location);
+  //console.log('Kubios Location Header:', location);
   if (location.includes('login?null')) {
     throw customError(
       'Login with Kubios failed due bad username/password',

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import {addMeasurement} from '../models/entry-model.js';
+import {addMeasurement} from '../models/hrv-model.js';
 
 const baseUrl = process.env.KUBIOS_API_URI;
 
