@@ -44,16 +44,21 @@ DROP TABLE IF EXISTS `kubios_results`;
 CREATE TABLE `kubios_results` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `measured_at` datetime NOT NULL,
-  `stress_index` decimal(5,2) DEFAULT NULL,
-  `readiness` int DEFAULT NULL,
+  `measure_id` varchar(36) NOT NULL,
+  `measured_at` datetime DEFAULT NULL,
+  `artefact_level` varchar(255) DEFAULT NULL,
   `mean_hr` decimal(5,2) DEFAULT NULL,
   `pns_index` decimal(5,2) DEFAULT NULL,
+  `readiness` decimal(5,2) DEFAULT NULL,
+  `rmssd` decimal(5,2) DEFAULT NULL,
+  `sdnn` decimal(5,2) DEFAULT NULL,
   `sns_index` decimal(5,2) DEFAULT NULL,
+  `stress_index` decimal(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
+  UNIQUE KEY `measure_id` (`measure_id`),
+  KEY `idx_user_id` (`user_id`),
   CONSTRAINT `kubios_results_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,9 +110,10 @@ DROP TABLE IF EXISTS `user_entries`;
 CREATE TABLE `user_entries` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `content` text NOT NULL,
   `mood_score` int DEFAULT NULL,
+  `workload` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `user_entries_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
@@ -146,17 +152,18 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `height` decimal(3,2) DEFAULT NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `role` enum('user','pro') DEFAULT 'user',
-  `kubios_user_id` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `kubios_user_id` (`kubios_user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,4 +198,4 @@ CREATE TABLE `weekly_reports` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-09 19:24:12
+-- Dump completed on 2026-04-13  1:19:56
