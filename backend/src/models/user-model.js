@@ -3,19 +3,12 @@ import promisePool from '../utils/database.js';
 // TODO: lisää modelit ja muokkaa kontrollerit reiteille:
 // GET /api/users/:id - get user by id
 
-// GET /api/users - list all users
-const listAllUsers = async () => {
-  const sql = 'SELECT username, created_at FROM Users';
-  const [rows] = await promisePool.query(sql);
-  return rows;
-};
-
 // POST /api/users - add a new user
 const addUser = async (user) => {
-  const {email, password, name} = user;
-  const sql = `INSERT INTO Users (email, password, name)
-               VALUES (?, ?, ?)`;
-  const params = [email, password, name];
+  const {given_name, email, password, height, weight, birthdate} = user;
+  const sql = `INSERT INTO Users (name, email, password, height, weight, date_of_birth)
+               VALUES (?, ?, ?, ?, ?, ?)`;
+  const params = [given_name, email, password, height, weight, birthdate];
   try {
     const result = await promisePool.execute(sql, params);
     //console.log('insert result', result);
@@ -25,13 +18,6 @@ const addUser = async (user) => {
     // eslint-disable-next-line preserve-caught-error
     throw new Error(e);
   }
-};
-
-// Huom: virheenkäsittely puuttuu, mutta sen voi tehdä myös kontrollerissa
-const findUserByUsername = async (username) => {
-  const sql = 'SELECT * FROM Users WHERE username = ?';
-  const [rows] = await promisePool.execute(sql, [username]);
-  return rows[0];
 };
 
 const selectUserByEmail = async (email) => {
@@ -55,7 +41,7 @@ const selectUserByEmail = async (email) => {
 
 const selectUserById = async (id) => {
   try {
-    const sql = 'SELECT * FROM Users WHERE user_id=?';
+    const sql = 'SELECT * FROM Users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     // console.log(rows);
@@ -73,9 +59,7 @@ const selectUserById = async (id) => {
 };
 
 export {
-  findUserByUsername,
   addUser,
-  listAllUsers,
   selectUserByEmail,
   selectUserById,
 };

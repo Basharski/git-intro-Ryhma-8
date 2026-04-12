@@ -4,7 +4,7 @@ import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
-import kubiosRouter from './routes/kubios-router.js';
+import entryRouter from './routes/entry-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 8000;
@@ -27,14 +27,13 @@ app.get('/api', (req, res) => {
 // Users resource router for all /api/users routes
 app.use('/api/users', userRouter);
 
-// Kubios data routera
-app.use('/api/kubios', kubiosRouter);
+// Entries router
+app.use('/api/entry', entryRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);
 // virheenkäsittelijälle ohjataa kaikki pyynnöt, jossa mukana on error objekti
 app.use(errorHandler);
-
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
