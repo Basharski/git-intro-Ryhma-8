@@ -41,17 +41,16 @@ const selectUserByEmail = async (email) => {
 
 const selectUserById = async (id) => {
   try {
-    const sql = 'SELECT * FROM Users WHERE id=?';
+    const sql = 'SELECT name, email, height, weight, date_of_birth FROM Users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
-    // console.log(rows);
+    console.log(rows);
     // if nothing is found with the user id, result array is empty []
     if (rows.length === 0) {
       return {error: 404, message: 'user not found'};
     }
-    // Remove password property from result
-    delete rows[0].password;
-    return rows[0];
+
+    return rows.length > 0 ? rows[0] : null;
   } catch (error) {
     console.error('selectUserByID', error);
     return {error: 500, message: 'db error'};

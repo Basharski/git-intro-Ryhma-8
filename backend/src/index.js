@@ -25,9 +25,9 @@ app.get('/api', (req, res) => {
 });
 
 // Users resource router for all /api/users routes
-app.use('/api/users', userRouter);
+app.use('/api/user', userRouter);
 
-// Entries router
+// HRV data router
 app.use('/api/hrv', entryRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
