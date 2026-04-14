@@ -6,7 +6,7 @@ import promisePool from '../utils/database.js';
 // POST /api/users - add a new user
 const addUser = async (user) => {
   const {given_name, email, password, height, weight, birthdate} = user;
-  const sql = `INSERT INTO Users (name, email, password, height, weight, date_of_birth)
+  const sql = `INSERT INTO users (name, email, password, height, weight, date_of_birth)
                VALUES (?, ?, ?, ?, ?, ?)`;
   const params = [given_name, email, password, height, weight, birthdate];
   try {
@@ -22,7 +22,7 @@ const addUser = async (user) => {
 
 const selectUserByEmail = async (email) => {
   try {
-    const sql = 'SELECT * FROM Users WHERE email=?';
+    const sql = 'SELECT * FROM users WHERE email=?';
     const params = [email];
     const [rows] = await promisePool.query(sql, params);
     // console.log(rows);
@@ -42,7 +42,7 @@ const selectUserByEmail = async (email) => {
 const selectUserById = async (id) => {
   try {
     const sql =
-      'SELECT name, email, height, weight, date_of_birth FROM Users WHERE id=?';
+      'SELECT name, email, height, weight, date_of_birth FROM users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     console.log(rows);
