@@ -6,7 +6,9 @@ export default [
     languageOptions: {
       ecmaVersion: 2021,
       sourceType: 'module',
-      globals: {...globals.node},
+      globals: {...globals.node,
+        ...globals.browser
+      },
     },
   },
   js.configs.recommended,

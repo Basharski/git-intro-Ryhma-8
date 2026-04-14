@@ -25,7 +25,7 @@ app.get('/api', (req, res) => {
 });
 
 // Users resource router for all /api/users routes
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 
 // HRV data router
 app.use('/api/hrv', entryRouter);

@@ -71,7 +71,7 @@ async function apiFetch(path, options = {}) {
 
 /** POST /api/login – Kirjautuminen, palauttaa JWT-tokenin */
 export async function login(email, password) {
-  const data = await apiFetch('/login', {
+  const data = await apiFetch('/users/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   });
