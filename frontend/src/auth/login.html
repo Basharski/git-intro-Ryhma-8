@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kirjaudu | Terveyssovellus</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body class="auth-page">
+
+    <div class="auth-box" role="main">
+      <div class="auth-logo">
+        <div class="auth-logo__title">TUES</div>
+        <div class="auth-logo__sub">Hyvinvoinnin seuranta</div>
+      </div>
+
+      <!-- Välilehdet: Kirjaudu / Rekisteröidy -->
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="form-login">
+          Kirjaudu
+        </button>
+        <button class="auth-tab" id="tab-register" role="tab" aria-selected="false" aria-controls="form-register">
+          Rekisteröidy
+        </button>
+      </div>
+
+      <!-- Kirjautumislomake -->
+      <div id="form-login" class="auth-form active" role="tabpanel">
+        <div class="form-group">
+          <label class="form-label" for="email">Sähköposti</label>
+          <input
+            class="form-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="etunimi@esimerkki.fi"
+            autocomplete="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Salasana</label>
+          <input
+            class="form-input"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+        <p id="login-message" class="auth-message" aria-live="polite"></p>
+        <button class="btn btn--primary" id="login-btn" type="button">
+          Kirjaudu sisään
+        </button>
+      </div>
+
+      <!-- Rekisteröitymislomake -->
+      <div id="form-register" class="auth-form" role="tabpanel">
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Sähköposti</label>
+          <input
+            class="form-input"
+            type="email"
+            id="reg-email"
+            name="reg-email"
+            placeholder="etunimi@esimerkki.fi"
+            autocomplete="email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Salasana</label>
+          <input
+            class="form-input"
+            type="password"
+            id="reg-password"
+            name="reg-password"
+            placeholder="Vähintään 8 merkkiä"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="reg-password2">Salasana uudelleen</label>
+          <input
+            class="form-input"
+            type="password"
+            id="reg-password2"
+            name="reg-password2"
+            placeholder="••••••••"
+            autocomplete="new-password"
+            required
+          />
+        </div>
+        <p id="register-message" class="auth-message" aria-live="polite"></p>
+        <button class="btn btn--primary" id="register-btn" type="button">
+          Luo tili
+        </button>
+      </div>
+    </div>
+
+    <div id="snackbar"></div>
+    <script type="module" src="login.js"></script>
+  </body>
+</html>

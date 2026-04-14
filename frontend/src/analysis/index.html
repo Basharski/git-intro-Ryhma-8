@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analyysi | Terveyssovellus</title>
+    <link rel="stylesheet" href="../../css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a class="navbar__brand" href="/src/home/index.html">TUES</a>
+      <div class="navbar__icons">
+        <a class="navbar__btn" href="/src/home/index.html" aria-label="Etusivu">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </a>
+        <a class="navbar__btn active" href="/src/analysis/index.html" aria-label="Analyysi">
+          <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4L22 6.92M21 21H3V3"/></svg>
+        </a>
+      </div>
+    </nav>
+
+    <main class="page">
+      <h1 class="section-title">Analyysi</h1>
+      <!--
+        TODO (new member 1): Toteuta tämä sivu feature/frontend-analysis -haarassa.
+        - Chart.js tai ApexCharts
+        - RMSSD-aikasarjakaavio
+        - Aikavälin valinta (viikko / kuukausi / kaikki)
+        - Stressitaso-graafi
+        Viittaa vaatimusdokumenttiin Kuva 6 (rautalankamalli)
+      -->
+      <div class="empty-state">
+        <div class="empty-state__icon">📊</div>
+        <div class="empty-state__text">Analyysisivu toteutetaan erillisessä feature-haarassa.</div>
+      </div>
+    </main>
+
+    <div id="snackbar"></div>
+    <script type="module">
+      import { requireAuth, applyTheme } from '../js/api.js';
+      applyTheme();
+      requireAuth();
+    </script>
+  </body>
+</html>
