@@ -5,7 +5,6 @@ export const getMeasurements = async (req, res, next) => {
     const {userId} = req.user;
 
     const measurements = await getMeasurementsByUserId(userId);
-    console.log(measurements);
     res.json(measurements);
   } catch (err) {
     next(err);

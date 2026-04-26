@@ -27,13 +27,13 @@ const updateUserProfile = async (req, res, next) => {
     if (email !== undefined) updateData.email = email;
     if (height !== undefined) updateData.height = height;
     if (weight !== undefined) updateData.weight = weight;
-    if(date_of_birth !== undefined) updateData.date_of_birth = date_of_birth;
+    if (date_of_birth !== undefined) updateData.date_of_birth = date_of_birth;
 
     if (Object.keys(updateData).lenght === 0) {
-      return res.status(400).json({message: 'Nothing to update'})
+      return res.status(400).json({message: 'Nothing to update'});
     }
 
-    const result = await updateUserDataById(userId, updateData)
+    const result = await updateUserDataById(userId, updateData);
 
     if (result) {
       res.json({message: 'Profile updated succesfully'});

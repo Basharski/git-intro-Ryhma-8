@@ -13,13 +13,14 @@ const addMeasurement = async (data) => {
     sdnn,
     sns_index,
     stress_index,
+    lf_hf,
   } = data;
 
   const sql = `INSERT IGNORE INTO kubios_results (user_id, measure_id, measured_at,
               artefact_level, mean_hr,
               pns_index, readiness, rmssd, sdnn,
-              sns_index, stress_index)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+              sns_index, stress_index, lf_hf)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const params = [
     user_id,
     measure_id,
@@ -32,6 +33,7 @@ const addMeasurement = async (data) => {
     sdnn,
     sns_index,
     stress_index,
+    lf_hf,
   ];
   try {
     const results = await promisePool.execute(sql, params);
@@ -44,7 +46,7 @@ const addMeasurement = async (data) => {
 };
 
 const getMeasurementsByUserId = async (userId) => {
-  const sql = `SELECT * FROM kubios_results
+  const sql = `SELECT rmssd, lf_hf, stress_index, readiness FROM kubios_results
               WHERE user_id = ?
               ORDER BY measured_at DESC`;
   const [rows] = await promisePool.execute(sql, [userId]);

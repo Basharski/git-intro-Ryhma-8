@@ -83,8 +83,9 @@ async function loadHrvData() {
       latest.stress_index != null ? Math.round(latest.stress_index) : '–';
     document.getElementById('hrv-recovery').textContent =
       latest.readiness != null ? Math.round(latest.readiness) : '–';
-  } catch {
+  } catch (e) {
     // Jätetään '–' placeholderit näkyviin
+    console.log(e)
   }
 }
 

@@ -13,6 +13,7 @@ const fetchKubiosData = async (tokenString) => {
     `${baseUrl}/result/self?from=2024-01-01T00%3A00%3A00%2B00%3A00`,
     {method: 'GET', headers: headers},
   );
+  console.log("RESULT: ", response)
 
   if (!response.ok) {
     throw new Error(`Kubios API error: ${response.status}`);
@@ -61,6 +62,7 @@ export const syncMeasurements = async (req, res, next) => {
           sdnn_ms: sdnn,
           sns_index,
           stress_index,
+          freq_domain: {LF_HF_power: lf_hf} = {},
         } = {},
       } = entry;
 
@@ -82,6 +84,7 @@ export const syncMeasurements = async (req, res, next) => {
         sdnn,
         sns_index,
         stress_index,
+        lf_hf,
       };
       console.log(newEntry);
       await addMeasurement(newEntry);
