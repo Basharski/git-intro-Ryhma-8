@@ -398,6 +398,64 @@ body {
   opacity: 0.85;
 }
 
+/* --- Analyysisivu --- */
+.analysis-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px var(--color-shadow);
+  border: 1px solid var(--color-border);
+}
+
+.analysis-controls label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.time-range-select {
+  padding: 0.5rem 0.75rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.time-range-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.charts-container {
+  display: grid;
+  gap: 2rem;
+}
+
+.chart-wrapper {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  border: 1px solid var(--color-border);
+}
+
+.chart-wrapper h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.chart-wrapper canvas {
+  max-height: 400px;
+}
+
 /* --- Exercise-kortit --- */
 .exercise-card {
   background: var(--color-surface-2);
