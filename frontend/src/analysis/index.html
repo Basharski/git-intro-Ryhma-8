@@ -21,25 +21,36 @@
 
     <main class="page">
       <h1 class="section-title">Analyysi</h1>
-      <!--
-        TODO (new member 1): Toteuta tämä sivu feature/frontend-analysis -haarassa.
-        - Chart.js tai ApexCharts
-        - RMSSD-aikasarjakaavio
-        - Aikavälin valinta (viikko / kuukausi / kaikki)
-        - Stressitaso-graafi
-        Viittaa vaatimusdokumenttiin Kuva 6 (rautalankamalli)
-      -->
-      <div class="empty-state">
-        <div class="empty-state__icon">📊</div>
-        <div class="empty-state__text">Analyysisivu toteutetaan erillisessä feature-haarassa.</div>
+
+      <div class="analysis-controls">
+        <label for="time-range">Aikaväli:</label>
+        <select id="time-range" class="time-range-select">
+          <option value="week">Viikko</option>
+          <option value="month">Kuukausi</option>
+          <option value="all" selected>Kaikki</option>
+        </select>
+      </div>
+
+      <div class="charts-container">
+        <div class="chart-wrapper">
+          <h2>RMSSD-aikasarja</h2>
+          <canvas id="rmssd-chart"></canvas>
+        </div>
+
+        <div class="chart-wrapper">
+          <h2>Stressitaso</h2>
+          <canvas id="stress-chart"></canvas>
+        </div>
       </div>
     </main>
 
     <div id="snackbar"></div>
     <script type="module">
       import { requireAuth, applyTheme } from '../js/api.js';
+      import { init } from '../js/analysis.js';
       applyTheme();
       requireAuth();
+      init();
     </script>
   </body>
 </html>
