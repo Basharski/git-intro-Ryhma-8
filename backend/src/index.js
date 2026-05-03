@@ -4,7 +4,8 @@ import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
-import entryRouter from './routes/hrv-router.js';
+import hrvEntryRouter from './routes/hrv-router.js';
+import entryRouter from './routes/entry-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 8000;
@@ -28,7 +29,10 @@ app.get('/api', (req, res) => {
 app.use('/api/user', userRouter);
 
 // HRV data router
-app.use('/api/hrv', entryRouter);
+app.use('/api/hrv', hrvEntryRouter);
+
+// User entries router
+app.use('/api/entry', entryRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);

@@ -1,11 +1,12 @@
 import express from 'express';
 import {authenticateToken} from '../middlewares/authentication.js';
 import {syncMeasurements} from '../controllers/kubios-data-controller.js';
-import {getMeasurements} from '../controllers/hrv-controller.js'
+import {getMeasurements} from '../controllers/hrv-controller.js';
 
-const entryRouter = express.Router();
+const hrvEntryRouter = express.Router();
 
-entryRouter.get('/data', authenticateToken, getMeasurements)
+hrvEntryRouter.get('/data', authenticateToken, getMeasurements);
 
-entryRouter.post('/saveData', authenticateToken, syncMeasurements);
-export default entryRouter;
+hrvEntryRouter.post('/saveData', authenticateToken, syncMeasurements);
+
+export default hrvEntryRouter;

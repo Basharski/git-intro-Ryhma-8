@@ -124,10 +124,10 @@ export async function fetchHrvFromKubios() {
 // ── Mieliala / kuormitus ───────────────────────────────────────────────────
 
 /** POST /api/mood – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
-export async function saveMood(mood, workload) {
-  return apiFetch('/mood', {
+export async function saveMood(mood, workload, message) {
+  return apiFetch('/entry/mood', {
     method: 'POST',
-    body: JSON.stringify({ mood, workload }),
+    body: JSON.stringify({ mood, workload, message }),
   });
 }
 

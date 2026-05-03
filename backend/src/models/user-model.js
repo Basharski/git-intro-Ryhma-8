@@ -1,8 +1,5 @@
 import promisePool from '../utils/database.js';
 
-// TODO: lisää modelit ja muokkaa kontrollerit reiteille:
-// GET /api/users/:id - get user by id
-
 // POST /api/users - add a new user
 const addUser = async (user) => {
   const {name, email, password, height, weight, date_of_birth} = user;

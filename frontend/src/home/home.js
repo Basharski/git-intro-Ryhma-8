@@ -161,6 +161,7 @@ async function loadRecommendations() {
 // ── Mieliala-liukusäädin ───────────────────────────────────────────────────
 
 const moodSlider = document.getElementById('mood-slider');
+const userMessageBox = document.getElementById('daily-log-message');
 const moodValueLabel = document.getElementById('mood-value-label');
 const MOOD_LABELS = ['', 'Erinomainen 😄', 'Hyvä 🙂', 'Normaali 😐', 'Väsynyt 😔', 'Erittäin kuormittunut 😟'];
 
@@ -173,8 +174,9 @@ updateMoodLabel();
 
 document.getElementById('save-mood-btn')?.addEventListener('click', async () => {
   const val = parseInt(moodSlider.value, 10);
+  const userText = userMessageBox.value;
   try {
-    await saveMood(val, val);
+    await saveMood(val, val, userText);
     showSnackbar('Kuormitustaso tallennettu ✓', 'success');
   } catch {
     showSnackbar('Tallennus epäonnistui', 'error');

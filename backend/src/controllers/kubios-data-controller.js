@@ -86,7 +86,6 @@ export const syncMeasurements = async (req, res, next) => {
         stress_index,
         lf_hf,
       };
-      console.log(newEntry);
       await addMeasurement(newEntry);
     }
 
