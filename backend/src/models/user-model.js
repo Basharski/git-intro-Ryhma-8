@@ -5,10 +5,10 @@ import promisePool from '../utils/database.js';
 
 // POST /api/users - add a new user
 const addUser = async (user) => {
-  const {given_name, email, password, height, weight, birthdate} = user;
+  const {name, email, password, height, weight, date_of_birth} = user;
   const sql = `INSERT INTO users (name, email, password, height, weight, date_of_birth)
                VALUES (?, ?, ?, ?, ?, ?)`;
-  const params = [given_name, email, password, height, weight, birthdate];
+  const params = [name, email, password, height, weight, date_of_birth];
   try {
     const result = await promisePool.execute(sql, params);
     //console.log('insert result', result);
@@ -42,7 +42,7 @@ const selectUserByEmail = async (email) => {
 const selectUserById = async (id) => {
   try {
     const sql =
-      'SELECT name, email, height, weight, date_of_birth FROM users WHERE id=?';
+      'SELECT name, email, height, weight, TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age FROM users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     console.log(rows);
@@ -59,18 +59,13 @@ const selectUserById = async (id) => {
 };
 
 const updateUserDataById = async (userId, data) => {
-  const fields = []
-  const params = []
+  const {name, height, weight} = data;
 
-  for (const [key, value] of Object.entries(data)) {
-    fields.push(`${key} = ?`);
-    params.push(value)
-  }
+  const params = [name, height, weight, userId];
 
-  const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-  params.push(userId)
+  const sql = `UPDATE users SET name = ?, height = ?, weight = ? WHERE id = ?`;
 
-  const [result] = promisePool.execute(sql, params);
+  const [result] = await promisePool.execute(sql, params);
 
   return result.affectedRows > 0;
 };

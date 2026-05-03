@@ -114,14 +114,17 @@ const syncWithLocalUser = async (kubiosUser) => {
   if (result.error) {
     // Create user
     const newUser = {
-      given_name: kubiosUser.given_name,
+      name: kubiosUser.given_name,
       email: kubiosUser.email,
       // Random password, quick workaround for the required field
       password: v4(),
-      height: kubiosUser.height,
+      // Change the height to cm
+      height: kubiosUser.height * 100,
       weight: kubiosUser.weight,
-      birthdate: kubiosUser.birthdate
+      date_of_birth: kubiosUser.birthdate
     };
+    console.log("RESULT: ", result);
+    console.log("NEW USER: ", newUser);
     const newUserResult = await addUser(newUser);
     userId = newUserResult.id;
   } else {

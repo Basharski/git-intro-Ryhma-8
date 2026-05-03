@@ -100,10 +100,11 @@ export async function getProfile() {
   return apiFetch('/user/profile');
 }
 
-/** PUT /api/user/profile – Päivitä profiilitiedot */
+/** PATCH /api/user/profile – Päivitä profiilitiedot */
 export async function updateProfile(profileData) {
+  console.log(profileData)
   return apiFetch('/user/profile', {
-    method: 'PUT',
+    method: 'PATCH',
     body: JSON.stringify(profileData),
   });
 }
