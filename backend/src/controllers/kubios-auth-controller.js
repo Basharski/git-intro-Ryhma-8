@@ -16,7 +16,6 @@ import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
 import {v4} from 'uuid';
 import {customError} from '../middlewares/error-handlers.js';
-// customError function not created in this project
 import {
   addUser,
   selectUserByEmail,
@@ -121,10 +120,10 @@ const syncWithLocalUser = async (kubiosUser) => {
       // Change the height to cm
       height: kubiosUser.height * 100,
       weight: kubiosUser.weight,
-      date_of_birth: kubiosUser.birthdate
+      date_of_birth: kubiosUser.birthdate,
     };
-    console.log("RESULT: ", result);
-    console.log("NEW USER: ", newUser);
+    console.log('RESULT: ', result);
+    console.log('NEW USER: ', newUser);
     const newUserResult = await addUser(newUser);
     userId = newUserResult.id;
   } else {
@@ -145,10 +144,32 @@ const syncWithLocalUser = async (kubiosUser) => {
 const postLogin = async (req, res, next) => {
   const {email, password} = req.body;
   try {
-    // Try to login with Kubios
-    const kubiosIdToken = await kubiosLogin(email, password);
-    const kubiosUser = await kubiosUserInfo(kubiosIdToken);
-    const localUserId = await syncWithLocalUser(kubiosUser);
+    let kubiosIdToken;
+    let kubiosUser;
+    let localUserId;
+
+    // Test if the user entered testing credentials
+    if (
+      email === process.env.TEST_EMAIL &&
+      password === process.env.TEST_PASSWORD
+    ) {
+      console.log('--- Using test credentials ---');
+
+      kubiosIdToken = 'mock-id-token-1234';
+      kubiosUser = {
+        given_name: 'Test',
+        email: 'test@test.com',
+        height: '1.8',
+        weight: '75',
+        birthdate: '2000-01-01',
+      };
+
+      localUserId = await syncWithLocalUser(kubiosUser);
+    } else {
+      kubiosIdToken = await kubiosLogin(email, password);
+      kubiosUser = await kubiosUserInfo(kubiosIdToken);
+      localUserId = await syncWithLocalUser(kubiosUser);
+    }
     // Include kubiosIdToken in the auth token used in this app
     const token = jwt.sign(
       {userId: localUserId, kubiosIdToken},
@@ -159,7 +180,10 @@ const postLogin = async (req, res, next) => {
     );
 
     return res.json({
-      message: 'Logged in successfully with Kubios',
+      message:
+        email === process.env.TEST_EMAIL
+          ? 'Logged in with test credentials'
+          : 'Logged in successfully with Kubios',
       user: kubiosUser,
       user_id: localUserId,
       token,
