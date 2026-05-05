@@ -18,4 +18,12 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-export {authenticateToken};
+// Stops the user from accessing professional only endpoints
+const requireProfessional = (req, res, next) => {
+  if (req.user.role !== 'professional') {
+    return res.status(403).json({ message: 'Access denied. Professionals only.' });
+  }
+  next();
+};
+
+export {authenticateToken, requireProfessional};

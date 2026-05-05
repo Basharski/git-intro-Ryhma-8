@@ -6,6 +6,7 @@ import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
 import hrvEntryRouter from './routes/hrv-data-router.js';
 import entryRouter from './routes/entry-router.js';
+import sharingRouter from './routes/sharing-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 8000;
@@ -33,6 +34,9 @@ app.use('/api/hrv', hrvEntryRouter);
 
 // User entries router
 app.use('/api/entry', entryRouter);
+
+// User data sharing with professional router
+app.use('api/sharing', sharingRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);

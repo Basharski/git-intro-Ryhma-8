@@ -17,7 +17,12 @@ const addUser = async (user) => {
   }
 };
 
-const selectUserByEmail = async (email) => {
+/**
+ * Fetches a user by email with an optional flag to include the password
+ * @param {string} email
+ * @param {boolean} includePassword - Default is false for security
+ */
+const selectUserByEmail = async (email, includePassword = false) => {
   try {
     const sql = 'SELECT * FROM users WHERE email=?';
     const params = [email];
@@ -27,8 +32,9 @@ const selectUserByEmail = async (email) => {
     if (rows.length === 0) {
       return {error: 404, message: 'user not found'};
     }
-    // Remove password property from result
-    delete rows[0].password;
+    if (!includePassword) {
+      delete user.password;
+    }
     return rows[0];
   } catch (error) {
     console.error('selectUserByEmail', error);
