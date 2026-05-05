@@ -1,5 +1,8 @@
 import fetch from 'node-fetch';
-import {addMeasurement} from '../models/hrv-model.js';
+import {
+  addMeasurement,
+  getMeasurements,
+} from '../models/hrv-data-model.js';
 
 const baseUrl = process.env.KUBIOS_API_URI;
 
@@ -13,7 +16,7 @@ const fetchKubiosData = async (tokenString) => {
     `${baseUrl}/result/self?from=2024-01-01T00%3A00%3A00%2B00%3A00`,
     {method: 'GET', headers: headers},
   );
-  console.log("RESULT: ", response)
+  console.log('RESULT: ', response);
 
   if (!response.ok) {
     throw new Error(`Kubios API error: ${response.status}`);
@@ -95,6 +98,17 @@ export const syncMeasurements = async (req, res, next) => {
     });
   } catch (err) {
     console.error('syncMeasurements failed:', err);
+    next(err);
+  }
+};
+
+export const getMeasurementsByUserId = async (req, res, next) => {
+  try {
+    const {userId} = req.user;
+
+    const measurements = await getMeasurements(userId);
+    res.json(measurements);
+  } catch (err) {
     next(err);
   }
 };

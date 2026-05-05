@@ -4,7 +4,7 @@ import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
-import hrvEntryRouter from './routes/hrv-router.js';
+import hrvEntryRouter from './routes/hrv-data-router.js';
 import entryRouter from './routes/entry-router.js';
 const hostname = '127.0.0.1';
 const app = express();

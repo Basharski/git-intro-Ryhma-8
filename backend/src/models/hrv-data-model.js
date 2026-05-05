@@ -37,7 +37,7 @@ const addMeasurement = async (data) => {
   ];
   try {
     const results = await promisePool.execute(sql, params);
-    return {"Measurements added": results};
+    return {'Measurements added': results};
   } catch (e) {
     console.error('error', e.message);
     // eslint-disable-next-line preserve-caught-error
@@ -45,17 +45,17 @@ const addMeasurement = async (data) => {
   }
 };
 
-const getMeasurementsByUserId = async (userId) => {
+const getMeasurements = async (userId) => {
   const sql = `SELECT rmssd, lf_hf, stress_index, readiness FROM kubios_results
               WHERE user_id = ?
-              ORDER BY measured_at DESC`;
+              ORDER BY measured_at ASC`;
   const [rows] = await promisePool.execute(sql, [userId]);
   if (rows.length === 0) {
-    console.log('No measurements found')
-    return
+    console.log('No measurements found');
+    return;
   } else {
-    return rows
+    return rows;
   }
 };
 
-export {addMeasurement, getMeasurementsByUserId};
+export {addMeasurement, getMeasurements, };

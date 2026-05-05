@@ -156,6 +156,7 @@ const postLogin = async (req, res, next) => {
       console.log('--- Using test credentials ---');
 
       kubiosIdToken = 'mock-id-token-1234';
+      // Create a test user to the database
       kubiosUser = {
         given_name: 'Test',
         email: 'test@test.com',
