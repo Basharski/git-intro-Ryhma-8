@@ -150,7 +150,6 @@ const postLogin = async (req, res, next) => {
 
     if (!localUser.error && localUser.role === 'pro') {
       const match = await bcrypt.compare(password, localUser.password);
-      console.log('Password match:', match);
       if (!match) {
         return res.status(401).json({message: 'Invalid credentials'});
       }
@@ -193,7 +192,8 @@ const postLogin = async (req, res, next) => {
         birthdate: '2000-01-01',
       };
       localUserId = await syncWithLocalUser(kubiosUser);
-    } else { // Use Kubios account if credentials aren't test credentials
+    } else {
+      // Use Kubios account if credentials aren't test or pro credentials
       kubiosIdToken = await kubiosLogin(email, password);
       kubiosUser = await kubiosUserInfo(kubiosIdToken);
       localUserId = await syncWithLocalUser(kubiosUser);

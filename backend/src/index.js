@@ -36,7 +36,7 @@ app.use('/api/hrv', hrvEntryRouter);
 app.use('/api/entry', entryRouter);
 
 // User data sharing with professional router
-app.use('api/sharing', sharingRouter);
+app.use('/api/sharing', sharingRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);

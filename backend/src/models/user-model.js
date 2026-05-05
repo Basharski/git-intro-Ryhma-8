@@ -27,11 +27,12 @@ const selectUserByEmail = async (email, includePassword = false) => {
     const sql = 'SELECT * FROM users WHERE email=?';
     const params = [email];
     const [rows] = await promisePool.query(sql, params);
-    // console.log(rows);
-    // if nothing is found with the user id, result array is empty []
     if (rows.length === 0) {
       return {error: 404, message: 'user not found'};
     }
+
+    const user = rows[0];
+
     if (!includePassword) {
       delete user.password;
     }

@@ -3,7 +3,7 @@ import promisePool from '../utils/database.js';
 // --- CONNECTION CODES ---
 
 export const createInviteCode = async (code, proId) => {
-  await db.execute(
+  await promisePool.execute(
     'INSERT INTO connection_codes (code, pro_id) VALUES (?, ?)',
     [code, proId]
   );
@@ -18,7 +18,7 @@ export const findInviteCode = async (code) => {
 };
 
 export const deleteInviteCode = async (code) => {
-  await db.execute('DELETE FROM connection_codes WHERE code = ?', [code]);
+  await promisePool.execute('DELETE FROM connection_codes WHERE code = ?', [code]);
 };
 
 
@@ -69,9 +69,9 @@ export const removePatientProLink = async (proId, patientId) => {
 // --- PATIENT DATA (For Pro View) ---
 
 export const getRecentMeasurements = async (patientId, limit = 30) => {
-  const [rows] = await db.execute(
-    'SELECT rmssd, lf_hf, stress_index, readiness, measured_at FROM measurements WHERE user_id = ? ORDER BY measured_at DESC LIMIT ?',
-    [patientId, limit.toString()] // limit sometimes requires string depending on the mysql wrapper
+  const [rows] = await promisePool.execute(
+    'SELECT rmssd, lf_hf, stress_index, readiness, measured_at FROM kubios_results WHERE user_id = ? ORDER BY measured_at DESC LIMIT ?',
+    [patientId, limit.toString()]
   );
   return rows;
 };

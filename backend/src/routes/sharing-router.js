@@ -1,57 +1,53 @@
 import express from 'express';
 import * as SharingController from '../controllers/sharing-controller.js';
-import { authenticateToken, requireProfessional } from '../middlewares/authentication.js';
+import {
+  authenticateToken,
+  requireProfessional,
+} from '../middlewares/authentication.js';
 
-const router = express.Router();
+const sharingRouter = express.Router();
 
-// ==========================================
-// PROFESSIONAL ROUTES
-// ==========================================
-// All these routes require the user to be logged in AND have the 'professional' role
-
-router.post(
+// --- PROFESSIONAL ROUTES ---
+// NEED 'role': 'pro' TO ACCESS
+sharingRouter.post(
   '/pro/generate-code',
   authenticateToken,
   requireProfessional,
-  SharingController.generateCode
+  SharingController.generateCode,
 );
 
-router.get(
+sharingRouter.get(
   '/pro/patients',
   authenticateToken,
   requireProfessional,
-  SharingController.getPatients
+  SharingController.getPatients,
 );
 
-router.get(
+sharingRouter.get(
   '/pro/patients/:patientId/data',
   authenticateToken,
   requireProfessional,
-  SharingController.getPatientData
+  SharingController.getPatientData,
 );
 
-
-// ==========================================
-// PATIENT / USER ROUTES
-// ==========================================
-// These routes only require standard authentication
-
-router.post(
+// --- NORMAL USER ROUTES ---
+// WORK WITH NORMAL 'role': 'user'
+sharingRouter.post(
   '/patient/claim-code',
   authenticateToken,
-  SharingController.claimCode
+  SharingController.claimCode,
 );
 
-router.put(
+sharingRouter.put(
   '/patient/permissions',
   authenticateToken,
-  SharingController.shareData
+  SharingController.shareData,
 );
 
-router.delete(
+sharingRouter.delete(
   '/patient/revoke',
   authenticateToken,
-  SharingController.revokeAccess
+  SharingController.revokeAccess,
 );
 
-export default router;
+export default sharingRouter;

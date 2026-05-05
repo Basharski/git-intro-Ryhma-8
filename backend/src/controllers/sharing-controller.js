@@ -37,7 +37,6 @@ export const getPatientData = async (req, res, next) => {
       return res.status(403).json({ message: 'Access denied or no active link.' });
     }
 
-    // You would use link.permissions here to decide what to return
     const measurements = await SharingModel.getRecentMeasurements(patientId, 30);
 
     res.json({
@@ -68,11 +67,11 @@ export const claimCode = async (req, res, next) => {
     const existingLink = await SharingModel.getLinkDetails(proId, patientId);
 
     if (existingLink) {
-      await SharingModel.deleteInviteCode(code); // Clean it up anyway
+      await SharingModel.deleteInviteCode(code);
       return res.status(400).json({ message: 'Already linked to this professional.' });
     }
 
-    const defaultPermissions = JSON.stringify({ share_hrv: true, share_sleep: true });
+    const defaultPermissions = JSON.stringify({ share_hrv: true, share_entries: true });
 
     await SharingModel.createPatientProLink(proId, patientId, defaultPermissions);
     await SharingModel.deleteInviteCode(code);
