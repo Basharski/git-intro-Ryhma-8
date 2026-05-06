@@ -43,7 +43,7 @@ async function apiFetch(path, options = {}) {
   const token = getToken();
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(token ? {Authorization: `Bearer ${token}`} : {}),
     ...options.headers,
   };
 
@@ -73,7 +73,7 @@ async function apiFetch(path, options = {}) {
 export async function login(email, password) {
   const data = await apiFetch('/user/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({email, password}),
   });
   saveToken(data.token);
   return data;
@@ -83,7 +83,7 @@ export async function login(email, password) {
 export async function register(email, password) {
   return apiFetch('/users', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({email, password}),
   });
 }
 
@@ -102,7 +102,6 @@ export async function getProfile() {
 
 /** PATCH /api/user/profile – Päivitä profiilitiedot */
 export async function updateProfile(profileData) {
-  console.log(profileData)
   return apiFetch('/user/profile', {
     method: 'PATCH',
     body: JSON.stringify(profileData),
@@ -123,7 +122,7 @@ export async function getLatestHrvData() {
 
 /** POST /api/hrv/fetch – Käynnistää HRV-datan noudon Kubioksesta */
 export async function fetchHrvFromKubios() {
-  return apiFetch('/hrv/fetch', { method: 'POST' });
+  return apiFetch('/hrv/fetch', {method: 'POST'});
 }
 
 // ── Mieliala / kuormitus ───────────────────────────────────────────────────
@@ -132,7 +131,7 @@ export async function fetchHrvFromKubios() {
 export async function saveMood(mood, workload, message) {
   return apiFetch('/entry/mood', {
     method: 'POST',
-    body: JSON.stringify({ mood, workload, message }),
+    body: JSON.stringify({mood, workload, message}),
   });
 }
 
@@ -145,11 +144,17 @@ export async function getRecommendations() {
 
 // ── Datan jakaminen ammattilaiselle ────────────────────────────────────────
 
-/** POST /api/share – Jakaa dataa ammattilaiselle */
-export async function shareWithProfessional(professionalId) {
-  return apiFetch('/share', {
+/** POST /api/sharing/patient/claim-code – Jakaa dataa ammattilaiselle */
+export async function shareWithProfessional(shareCode) {
+  return apiFetch('/sharing/patient/claim-code', {
     method: 'POST',
-    body: JSON.stringify({ professionalId }),
+    body: JSON.stringify({shareCode}),
+  });
+}
+
+export async function revokeProfessionalAccess() {
+  return apiFetch('/sharing/patient/revoke', {
+    method: 'DELETE'
   });
 }
 
@@ -178,7 +183,8 @@ export function applyTheme() {
 }
 
 export function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') ?? 'light';
+  const current =
+    document.documentElement.getAttribute('data-theme') ?? 'light';
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('tues_theme', next);

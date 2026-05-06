@@ -46,7 +46,7 @@ const selectUserByEmail = async (email, includePassword = false) => {
 const selectUserById = async (id) => {
   try {
     const sql =
-      'SELECT name, email, height, weight, TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age FROM users WHERE id=?';
+      'SELECT name, email, height, weight, pro_code, TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age FROM users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
     console.log(rows);

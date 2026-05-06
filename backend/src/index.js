@@ -40,8 +40,6 @@ app.use('/api/entry', entryRouter);
 app.use('/api/sharing', sharingRouter);
 
 // Route for weekly reports
-app.use('/api/reports,', reportRouter);
-
 app.use('/api/reports', reportRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne

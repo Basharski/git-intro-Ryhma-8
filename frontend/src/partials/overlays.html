@@ -32,9 +32,7 @@
 
     <!-- Ladattava formaatti -->
     <div>
-      <p class="form-label" style="margin-bottom: 0.6rem">
-        Latausformaatti
-      </p>
+      <p class="form-label" style="margin-bottom: 0.6rem">Latausformaatti</p>
       <div class="radio-group" id="download-format">
         <label class="radio-option">
           <input type="radio" name="format" value="csv" checked /> CSV
@@ -55,6 +53,61 @@
       </button>
     </div>
 
+    <!-- SHARE TO A PROFESSIONAL FIELD -->
+    <div
+      id="pro-link-section"
+      style="
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--color-border);
+      "
+    >
+      <!-- STATE A: No link between user and professional -->
+      <div id="pro-link-input-container">
+        <p class="form-label" style="margin-bottom: 0.6rem">
+          Jaa data asiantuntijalle
+        </p>
+        <div style="display: flex; gap: 0.5rem">
+          <input
+            type="text"
+            id="invite-code-input"
+            class="form-input"
+            placeholder="Kutsuviite"
+          />
+          <button
+            class="btn btn--primary"
+            id="send-code-btn"
+            style="width: auto"
+          >
+            Jaa
+          </button>
+        </div>
+      </div>
+
+      <!-- STATE B: Link found between user and professional -->
+      <div id="pro-link-status-container" style="display: none">
+        <p class="form-label" style="margin-bottom: 0.2rem">
+          Aktiivinen yhteys
+        </p>
+        <p
+          id="share-status"
+          style="
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 0.6rem;
+          "
+        ></p>
+        <button
+          class="btn btn--danger btn--sm"
+          id="revoke-code-btn"
+          style="width: auto"
+        >
+          Lopeta tietojen jako
+        </button>
+      </div>
+    </div>
+
     <!-- Poista kaikki data -->
     <div style="margin-top: auto">
       <button class="btn btn--danger" id="delete-all-btn">
@@ -63,9 +116,7 @@
     </div>
 
     <!-- Uloskirjautuminen -->
-    <button class="btn btn--secondary" id="logout-btn">
-      Kirjaudu ulos
-    </button>
+    <button class="btn btn--secondary" id="logout-btn">Kirjaudu ulos</button>
   </div>
 </div>
 
@@ -132,9 +183,7 @@
       />
     </div>
     <div class="form-group">
-      <label class="form-label" for="profile-email-display"
-        >Sähköposti</label
-      >
+      <label class="form-label" for="profile-email-display">Sähköposti</label>
       <input
         class="form-input"
         type="email"
@@ -146,11 +195,7 @@
     <p
       id="profile-message"
       aria-live="polite"
-      style="
-        font-size: 0.85rem;
-        color: var(--color-primary);
-        min-height: 1.2em;
-      "
+      style="font-size: 0.85rem; color: var(--color-primary); min-height: 1.2em"
     ></p>
     <button class="btn btn--primary" id="save-profile-btn">
       Tallenna muutokset
