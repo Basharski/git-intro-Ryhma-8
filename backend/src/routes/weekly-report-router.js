@@ -1,9 +1,9 @@
 import express from 'express';
 import {
-  getPatientReports,
+  getUserReports,
   addCommentToReport,
   triggerReportGeneration,
-  getLatestPatientReport,
+  getLatestUserReport,
 } from '../controllers/weekly-report-controller.js';
 import {
   authenticateToken,
@@ -12,8 +12,8 @@ import {
 
 const reportRouter = express.Router();
 
-// Get reports for a patient
-reportRouter.get('/patient/:patientId', authenticateToken, getPatientReports);
+// Get reports for a specific user
+reportRouter.get('/user', authenticateToken, getUserReports);
 
 // Add a comment to a specific weekly report
 // Requires 'role': 'pro' to access
@@ -25,9 +25,9 @@ reportRouter.put(
 );
 
 // Get the latest weekly report for specific user
-reportRouter.get('/latest/:patientId', authenticateToken, getLatestPatientReport);
+reportRouter.get('/latest', authenticateToken, getLatestUserReport);
 
-// Generate reports manually for a patient
-reportRouter.post('/generate/:patientId', authenticateToken, triggerReportGeneration);
+// Generate reports manually for a user
+reportRouter.post('/generate', authenticateToken, triggerReportGeneration);
 
 export default reportRouter;

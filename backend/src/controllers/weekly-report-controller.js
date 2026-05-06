@@ -5,12 +5,12 @@ import {
   getLatestReportByUserId,
 } from '../models/weekly-report-model.js';
 
-// Get all reports for a patient
-export const getPatientReports = async (req, res) => {
-  const patientId = req.params.patientId;
+// Get all reports for a specific user
+export const getUserReports = async (req, res) => {
+  const userId = req.user.userId;
 
   try {
-    const reports = await getReportsByUserId(patientId);
+    const reports = await getReportsByUserId(userId);
     if (reports.error) {
       return res.status(reports.error).json({message: reports.message});
     }
@@ -24,7 +24,7 @@ export const getPatientReports = async (req, res) => {
 
 // Professional can add their comment on the users weekly reports
 export const addCommentToReport = async (req, res) => {
-  const reportId = req.params.reportId;
+  const reportId = req.user.reportId;
   const {comment} = req.body;
 
   if (!comment) {
@@ -45,11 +45,11 @@ export const addCommentToReport = async (req, res) => {
 };
 
 // Gets the latest weekly report
-export const getLatestPatientReport = async (req, res) => {
-  const patientId = req.params.patientId;
+export const getLatestUserReport = async (req, res) => {
+  const userId = req.user.userId;
 
   try {
-    const report = await getLatestReportByUserId(patientId);
+    const report = await getLatestReportByUserId(userId);
     if (report.error) {
       return res.status(report.error).json({message: report.message});
     }
@@ -62,10 +62,10 @@ export const getLatestPatientReport = async (req, res) => {
 
 // Generates weekly reports for the user from the data already in the database
 export const triggerReportGeneration = async (req, res) => {
-  const patientId = req.params.patientId;
+  const userId = req.user.userId;
 
   try {
-    const result = await generateReportsForUser(patientId);
+    const result = await generateReportsForUser(userId);
     if (result.error) {
       return res.status(result.error).json({message: result.message});
     }

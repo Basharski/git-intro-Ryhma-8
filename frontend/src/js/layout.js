@@ -115,38 +115,36 @@ export function initLayout() {
 
   // --- DATA SHARING TO A PROFESSIONAL ---
   document.addEventListener('click', async (e) => {
-    if (e.target.closest('#send-code-btn')) {
-      const input = document.getElementById('invite-code-input');
-      const code = input?.value.trim();
-      if (!code) return;
+  if (e.target.closest('#send-code-btn')) {
+    const input = document.getElementById('invite-code-input');
+    const code = input?.value.trim();
+    if (!code) return;
 
-      // Share data with a professional
+    // Share data with a professional
+    try {
+      await shareWithProfessional(code);
+      toggleProLinkUI(true, code);
+      showSnackbar('Tietojen jako aktivoitu!', 'success');
+      input.value = '';
+    } catch (err) {
+      showSnackbar('Virheellinen koodi', 'error');
+    }
+  }
+
+  // Revoke the professionals access
+  if (e.target.closest('#revoke-code-btn')) {
+    if (confirm('Haluatko varmasti lopettaa tietojen jaon asiantuntijalle?')) {
       try {
-        await shareWithProfessional(code);
-        toggleProLinkUI(true, code);
-        showSnackbar('Tietojen jako aktivoitu!', 'success');
-        input.value = '';
+        await revokeProfessionalAccess();
+        toggleProLinkUI(false);
+        showSnackbar('Tietojen jako lopetettu', 'success');
       } catch (err) {
-        showSnackbar('Virheellinen koodi', 'error');
+        console.log(err)
+        showSnackbar('Yhteyden katkaisu epäonnistui', 'error');
       }
     }
-
-    // Revoke the professionals access
-    if (e.target.closest('#revoke-code-btn')) {
-      if (
-        confirm('Haluatko varmasti lopettaa tietojen jaon asiantuntijalle?')
-      ) {
-        try {
-          await revokeProfessionalAccess();
-          toggleProLinkUI(false);
-          showSnackbar('Tietojen jako lopetettu', 'success');
-        } catch (err) {
-          console.log(err);
-          showSnackbar('Yhteyden katkaisu epäonnistui', 'error');
-        }
-      }
-    }
-  });
+  }
+});
 
   // --- SAVE PROFILE ---
   document

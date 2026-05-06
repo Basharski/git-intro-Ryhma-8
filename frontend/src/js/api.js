@@ -125,6 +125,13 @@ export async function fetchHrvFromKubios() {
   return apiFetch('/hrv/fetch', {method: 'POST'});
 }
 
+// -- Viikottaiset raportit ──────────────────────────────────────────────────
+
+/** GET /api/reports/user/:userId - Palauttaa tietyn käyttäjän viikkoraportit */
+export async function getWeeklyReports() {
+  return apiFetch(`/reports/user`);
+}
+
 // ── Mieliala / kuormitus ───────────────────────────────────────────────────
 
 /** POST /api/mood – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
