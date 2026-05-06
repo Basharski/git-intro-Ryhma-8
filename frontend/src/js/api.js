@@ -116,6 +116,11 @@ export async function getHrvData() {
   return apiFetch('/hrv/data');
 }
 
+/** GET /api/hrv/data/latest - Palauttaa uusimman HRV-mittauksen */
+export async function getLatestHrvData() {
+  return apiFetch('/hrv/data/latest');
+}
+
 /** POST /api/hrv/fetch – Käynnistää HRV-datan noudon Kubioksesta */
 export async function fetchHrvFromKubios() {
   return apiFetch('/hrv/fetch', { method: 'POST' });

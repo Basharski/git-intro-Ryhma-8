@@ -3,6 +3,7 @@ import {
   getProfile,
   updateProfile,
   getHrvData,
+  getLatestHrvData,
   fetchHrvFromKubios,
   getRecommendations,
   saveMood,
@@ -71,7 +72,7 @@ async function loadProfile() {
 
 async function loadHrvData() {
   try {
-    const data = await getHrvData();
+    const data = await getLatestHrvData();
     const latest = Array.isArray(data) ? data[data.length - 1] : data;
     if (!latest) return;
 
