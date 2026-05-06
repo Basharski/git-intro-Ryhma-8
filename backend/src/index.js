@@ -7,6 +7,7 @@ import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
 import hrvEntryRouter from './routes/hrv-data-router.js';
 import entryRouter from './routes/entry-router.js';
 import sharingRouter from './routes/sharing-router.js';
+import reportRouter from './routes/weekly-report-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 8000;
@@ -38,10 +39,16 @@ app.use('/api/entry', entryRouter);
 // User data sharing with professional router
 app.use('/api/sharing', sharingRouter);
 
+// Route for weekly reports
+app.use('/api/reports,', reportRouter);
+
+app.use('/api/reports', reportRouter);
+
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);
 // virheenkäsittelijälle ohjataa kaikki pyynnöt, jossa mukana on error objekti
 app.use(errorHandler);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
