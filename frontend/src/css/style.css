@@ -251,8 +251,8 @@ body {
   justify-content: flex-end;
 }
 
-.overlay-backdrop.open {
-  display: flex;
+.overlay-backdrop.is-visible {
+  display: flex !important;
 }
 
 .overlay-panel {

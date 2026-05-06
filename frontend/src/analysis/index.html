@@ -7,17 +7,7 @@
     <link rel="stylesheet" href="../css/style.css" />
   </head>
   <body>
-    <nav class="navbar">
-      <a class="navbar__brand" href="/src/home/index.html">TUES</a>
-      <div class="navbar__icons">
-        <a class="navbar__btn" href="/src/home/index.html" aria-label="Etusivu">
-          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        </a>
-        <a class="navbar__btn active" href="/src/analysis/index.html" aria-label="Analyysi">
-          <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4L22 6.92M21 21H3V3"/></svg>
-        </a>
-      </div>
-    </nav>
+    <load src="/src/partials/navbar.html" />
 
     <main class="page">
       <h1 class="section-title">Analyysi</h1>
@@ -43,14 +33,19 @@
         </div>
       </div>
     </main>
+    <load src="/src/partials/overlays.html" />
 
-    <div id="snackbar"></div>
     <script type="module">
-      import { requireAuth, applyTheme } from '../js/api.js';
-      import { init } from '../js/analysis.js';
-      applyTheme();
+      import {requireAuth} from '../js/api.js';
+      import {initLayout} from '../js/layout.js';
+      import {init} from '../js/analysis.js';
+
       requireAuth();
-      init();
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initLayout();
+        init();
+      });
     </script>
   </body>
 </html>
