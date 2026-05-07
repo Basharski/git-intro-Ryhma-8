@@ -8,26 +8,25 @@ const userRouter = express.Router();
 // POST user login
 userRouter.post('/login', postLogin);
 
+userRouter.use(authenticateToken);
+
 // Get and update users data
 userRouter
-  .get('/profile', authenticateToken, UserController.getUserDataById)
-  .patch('/profile', authenticateToken, UserController.updateUserProfile);
+  .get('/profile', UserController.getUserDataById)
+  .patch('/profile', UserController.updateUserProfile);
 
 userRouter.post(
   '/patient/claim-code',
-  authenticateToken,
   UserController.claimCode,
 );
 
 userRouter.put(
   '/patient/permissions',
-  authenticateToken,
   UserController.updateShareDataPermissions,
 );
 
 userRouter.delete(
   '/patient/revoke',
-  authenticateToken,
   UserController.revokeAccess,
 );
 

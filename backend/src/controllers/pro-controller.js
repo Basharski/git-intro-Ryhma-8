@@ -15,63 +15,67 @@ export const generateCode = async (req, res, next) => {
   }
 };
 
-export const getPatients = async (req, res, next) => {
+// Haetaan kaikki asiantuntijaan linkitetyt potilaat
+export const getPatients = async (req, res) => {
   try {
     const proId = req.user.userId;
     const patients = await ProModel.getLinkedPatients(proId);
-
     res.json(patients);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    res.status(500).json({error: 'Palvelinvirhe potilaiden haussa'});
   }
 };
 
-export const getPatientData = async (req, res, next) => {
+// Haetaan tietyn potilaan viikkoraportit
+export const getPatientReports = async (req, res) => {
   try {
     const proId = req.user.userId;
     const {patientId} = req.params;
 
-    const link = await ProModel.getLinkDetails(proId, patientId);
-
-    if (!link) {
+    const hasAccess = await ProModel.checkAccess(proId, patientId);
+    if (!hasAccess) {
       return res
         .status(403)
-        .json({message: 'Access denied or no active link.'});
+        .json({error: 'Ei käyttöoikeutta potilaan tietoihin'});
     }
 
-    const measurements = await ProModel.getRecentMeasurements(
-      patientId,
-      30,
-    );
-
-    res.json({
-      patientId,
-      permissions: link.permissions,
-      data: measurements,
-    });
-  } catch (err) {
-    next(err);
+    const reports = await ProModel.getPatientWeeklyReports(patientId);
+    res.json(reports);
+  } catch (error) {
+    res.status(500).json({error: 'Virhe raporttien haussa'});
   }
 };
 
-// Professional can add their comment on the users weekly reports
-export const addCommentToReport = async (req, res) => {
-  const reportId = req.user.reportId;
-  const {comment} = req.body;
-
-  if (!comment) {
-    return res.status(400).json({message: 'Comment text is required'});
-  }
-
+// Haetaan päivätason tarkka data
+export const getPatientDailyLogs = async (req, res) => {
   try {
-    const result = await ProModel.updateProComment(reportId, comment);
-    if (result.error) {
-      return res.status(result.error).json({message: result.message});
+    const proId = req.user.userId;
+    const patientId = req.params.id;
+    const {start, end} = req.query; // Haetaan aikaväli query-parametreista
+
+    const hasAccess = await ProModel.checkAccess(proId, patientId);
+    if (!hasAccess) {
+      return res.status(403).json({error: 'Pääsy evätty'});
     }
 
-    res.json({message: 'Comment saved successfully'});
-  } catch (err) {
-    console.error('addCommentToReport Error:', err);
-    res.status(500).json({message: 'Internal server error'});
+    const logs = await ProModel.getPatientDailyLogs(patientId, start, end);
+    res.json(logs);
+  } catch (error) {
+    res.status(500).json({error: 'Virhe lokien haussa'});
+  }
+};
+
+// Päivitetään ammattilaisen palaute
+export const addFeedback = async (req, res) => {
+  try {
+    const {reportId, feedback} = req.body;
+    const result = await ProModel.updateProComment(reportId, feedback);
+
+    if (result.error) {
+      return res.status(result.error).json({error: result.message});
+    }
+    res.json({message: 'Palaute tallennettu'});
+  } catch (error) {
+    res.status(500).json({error: 'Virhe palautteen tallennuksessa'});
   }
 };

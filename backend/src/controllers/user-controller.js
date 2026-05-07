@@ -5,7 +5,7 @@ export const getUserDataById = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
-    const user = await selectUserById(userId);
+    const user = await UserModel.selectUserById(userId);
 
     if (!user) {
       return res.status(404).json({message: 'User not found'});
@@ -26,7 +26,7 @@ export const updateUserProfile = async (req, res, next) => {
 
     const updateData = {name, height, weight};
 
-    const result = await updateUserDataById(userId, updateData);
+    const result = await UserModel.updateUserDataById(userId, updateData);
 
     if (result) {
       res.json({message: 'Profile updated succesfully'});
@@ -107,8 +107,9 @@ export const updateShareDataPermissions = async (req, res, next) => {
 export const revokeAccess = async (req, res, next) => {
   try {
     const patientId = req.user.userId;
+    console.log(patientId)
 
-    await UserPro.removePatientProLink(patientId);
+    await UserModel.removePatientProLink(patientId);
 
     res.status(200).json({message: 'Access revoked successfully.'});
   } catch (err) {

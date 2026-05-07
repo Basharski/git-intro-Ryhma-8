@@ -7,37 +7,35 @@ import {
 
 const proRouter = express.Router();
 
+proRouter.use(authenticateToken);
+
 // --- PROFESSIONAL ROUTES ---
 // NEED 'role': 'pro' TO ACCESS
+
 proRouter.post(
-  '/pro/generate-code',
-  authenticateToken,
+  '/generate-code',
   requireProfessional,
   ProController.generateCode,
 );
 
 // Gets linked patients
-proRouter.get(
-  '/pro/patients',
-  authenticateToken,
-  requireProfessional,
-  ProController.getPatients,
-);
+proRouter.get('/patients', requireProfessional, ProController.getPatients);
 
 // Gets linked patients data
 proRouter.get(
-  '/pro/patient/:patientId/data',
-  authenticateToken,
+  '/patients/:patientId/reports',
   requireProfessional,
-  ProController.getPatientData,
+  ProController.getPatientReports,
 );
 
+// Gets the daily data of a patient
+proRouter.get('/patients/:id/daily', ProController.getPatientDailyLogs);
+
 // Updates a specific weekly reports comment
-proRouter.patch(
-  '/:reportId/comment',
-  authenticateToken,
+proRouter.put(
+  '/reports/feedback',
   requireProfessional,
-  ProController.addCommentToReport,
+  ProController.addFeedback,
 );
 
 export default proRouter;

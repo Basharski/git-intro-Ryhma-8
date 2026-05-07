@@ -1,59 +1,5 @@
 import promisePool from '../utils/database.js';
 
-// --- PRO/PATIENT LINKS ---
-
-export const getLinkDetails = async (proId, patientId) => {
-  const [rows] = await promisePool.execute(
-    'SELECT * FROM patient_pro_links WHERE pro_id = ? AND patient_id = ?',
-    [proId, patientId],
-  );
-  return rows[0];
-};
-
-export const createPatientProLink = async (
-  proId,
-  patientId,
-  permissionsJson,
-) => {
-  await promisePool.execute(
-    'INSERT INTO patient_pro_links (pro_id, patient_id, permissions) VALUES (?, ?, ?)',
-    [proId, patientId, permissionsJson],
-  );
-};
-
-export const updatePatientProCode = async (userId, proCode) => {
-  await promisePool.execute('UPDATE users SET pro_code = ? WHERE id = ?', [
-    proCode,
-    userId,
-  ]);
-};
-
-export const updateLinkPermissions = async (
-  proId,
-  patientId,
-  permissionsJson,
-) => {
-  const [result] = await promisePool.execute(
-    'UPDATE patient_pro_links SET permissions = ? WHERE patient_id = ? AND pro_id = ?',
-    [permissionsJson, patientId, proId],
-  );
-  return result.affectedRows > 0; // Returns true if a row was updated
-};
-
-export const removePatientProLink = async (userId) => {
-  // Remove link from database
-  await promisePool.execute(
-    'DELETE FROM patient_pro_links WHERE patient_id = ?',
-    [userId],
-  );
-
-  // Remove share code from users information
-  await promisePool.execute(
-    'UPDATE users SET pro_code = NULL WHERE id = ?',
-    [userId],
-  );
-};
-
 // --- PROFESSIONAL FUNCTIONS (For Pro View) ---
 
 // Creates a 6 character code that links a user and a professional if used
@@ -62,14 +8,6 @@ export const createInviteCode = async (code, proId) => {
     'INSERT INTO connection_codes (code, pro_id) VALUES (?, ?)',
     [code, proId],
   );
-};
-
-export const getRecentMeasurements = async (patientId, limit = 30) => {
-  const [rows] = await promisePool.execute(
-    'SELECT rmssd, lf_hf, stress_index, readiness, measured_at FROM kubios_results WHERE user_id = ? ORDER BY measured_at DESC LIMIT ?',
-    [patientId, limit.toString()],
-  );
-  return rows;
 };
 
 // Gets all linked user to a specific professional
@@ -86,18 +24,72 @@ export const getLinkedPatients = async (proId) => {
   return rows;
 };
 
+// Gets patients weekly reports
+export const getPatientWeeklyReports = async (patientId) => {
+  const [rows] = await promisePool.execute(
+    `
+    SELECT id, week_number, year, avg_rmssd, avg_readiness, avg_stress_score, avg_mood_score, pro_comment, created_at
+    FROM weekly_reports
+    WHERE user_id = ?
+    ORDER BY year DESC, week_number DESC
+    `,
+    [patientId],
+  );
+  return rows;
+};
+
+// Gets more detailed information from the users measurement data
+export const getPatientDailyLogs = async (patientId, startDate, endDate) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `
+      SELECT
+        k.measured_at,
+        k.rmssd,
+        k.readiness,
+        k.stress_index,
+        u.mood_score,
+        u.user_text,
+        u.created_at AS entry_created_at
+      FROM kubios_results k
+      LEFT JOIN user_entries u
+        ON k.user_id = u.user_id
+        AND DATE(k.measured_at) = DATE(u.created_at)
+      WHERE k.user_id = ?
+        AND k.measured_at >= ?
+        AND k.measured_at <= ?
+      ORDER BY k.measured_at ASC
+      `,
+      [patientId, `${startDate} 00:00:00`, `${endDate} 23:59:59`],
+    );
+    return rows;
+  } catch (error) {
+    console.error('getPatientDailyLogs error:', error);
+    throw error;
+  }
+};
+
+// Checks if the professional has access to the users data
+export const checkAccess = async (proId, patientId) => {
+  const [rows] = await promisePool.execute(
+    'SELECT 1 FROM patient_pro_links WHERE pro_id = ? AND patient_id = ?',
+    [proId, patientId],
+  );
+  return rows.length > 0;
+};
+
 // Professional can add their comment on the weekly report
-export const updateProComment = async (reportId, comment) => {
+export const updateProComment = async (reportId, feedback) => {
   try {
     const sql = 'UPDATE weekly_reports SET pro_comment = ? WHERE id = ?';
-    const [result] = await promisePool.query(sql, [comment, reportId]);
+    const [result] = await promisePool.query(sql, [feedback, reportId]);
 
     if (result.affectedRows === 0) {
-      return { error: 404, message: 'Report not found' };
+      return {error: 404, message: 'Report not found'};
     }
-    return { success: true };
+    return {success: true};
   } catch (error) {
     console.error('updateProComment error:', error);
-    return { error: 500, message: 'db error' };
+    return {error: 500, message: 'db error'};
   }
 };

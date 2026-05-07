@@ -1,0 +1,121 @@
+/* Professional Dashboard Specifics */
+
+.patient-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.card-grid--compact {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.card--stat {
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Accordion Styles */
+.pro-reports-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pro-report-accordion {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.pro-report-accordion[open] {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border-color: var(--color-primary-light);
+}
+
+.pro-report-summary {
+    padding: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none; /* Poistaa oletusnuolen */
+    font-weight: 600;
+}
+
+.pro-report-summary::-webkit-details-marker {
+    display: none; /* Safarille */
+}
+
+.pro-report-summary__left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.week-tag {
+    background: var(--color-primary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+}
+
+.pro-report-content {
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-2);
+}
+
+.pro-report-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+}
+
+@media (max-width: 1000px) {
+    .pro-report-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pro-report-chart-container {
+    background: var(--color-surface);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    min-height: 300px;
+}
+
+.patient-diary-preview {
+    background: #fff;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--color-primary);
+    margin: 1rem 0;
+    font-size: 0.9rem;
+}
+
+[data-theme='dark'] .patient-diary-preview {
+    background: var(--color-surface);
+}
+
+.pro-feedback-area {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--color-border);
+}
+
+.icon-chevron {
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
+
+.pro-report-accordion[open] .icon-chevron {
+    transform: rotate(180deg);
+}

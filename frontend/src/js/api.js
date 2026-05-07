@@ -15,8 +15,9 @@ export function getToken() {
   return localStorage.getItem('tues_token');
 }
 
-export function clearToken() {
+export function clearLocalStorage() {
   localStorage.removeItem('tues_token');
+  localStorage.removeItem('userId');
 }
 
 export function isLoggedIn() {
@@ -89,7 +90,7 @@ export async function register(email, password) {
 
 /** Uloskirjautuminen (paikallinen) */
 export function logout() {
-  clearToken();
+  clearLocalStorage();
   window.location.href = '/src/auth/login.html';
 }
 
@@ -153,15 +154,53 @@ export async function getRecommendations() {
 
 /** POST /api/sharing/patient/claim-code – Jakaa dataa ammattilaiselle */
 export async function shareWithProfessional(shareCode) {
-  return apiFetch('/sharing/patient/claim-code', {
+  return apiFetch('/user/patient/claim-code', {
     method: 'POST',
     body: JSON.stringify({shareCode}),
   });
 }
 
 export async function revokeProfessionalAccess() {
-  return apiFetch('/sharing/patient/revoke', {
-    method: 'DELETE'
+  return apiFetch('/user/patient/revoke', {
+    method: 'DELETE',
+  });
+}
+
+// ── Ammattilaisen API-kutsut ───────────────────────────────────────────────
+
+/** Luo kutsukoodin, joka linkittää käyttäjän ja ammattilaisen */
+export async function generateCode() {
+  return apiFetch('/pro/generate-code', { method: 'POST' });
+}
+
+/** Hakee kaikki potilaat, jotka ovat linkittäneet tilinsä tälle ammattilaiselle */
+export async function getPatients() {
+  return apiFetch('/pro/patients');
+}
+
+/** * Hakee tietyn potilaan viikkoraportit
+ * Polku vastaa backendin: /api/pro/patients/:id/reports
+ */
+export async function getPatientReports(patientId) {
+  return apiFetch(`/pro/patients/${patientId}/reports`);
+}
+
+/** * Hakee tarkat päivätason tiedot (Kubios + Päiväkirja) tietyltä väliltä
+ * Käytetään haitari-näkymän graafeihin.
+ * @param {string} start - 'YYYY-MM-DD'
+ * @param {string} end - 'YYYY-MM-DD'
+ */
+export async function getPatientDailyLogs(patientId, start, end) {
+  return apiFetch(`/pro/patients/${patientId}/daily?start=${start}&end=${end}`);
+}
+
+/** * Päivittää ammattilaisen kommentin tiettyyn raporttiin
+ * Polku vastaa backendin PATCH-reittiä
+ */
+export async function updateReportFeedback(reportId, feedback) {
+  return apiFetch(`/pro/reports/feedback`, {
+    method: 'PUT',
+    body: JSON.stringify({ reportId, feedback }),
   });
 }
 

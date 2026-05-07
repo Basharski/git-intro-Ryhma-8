@@ -49,7 +49,6 @@ export const selectUserById = async (id) => {
       'SELECT name, email, height, weight, pro_code, TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) AS age FROM users WHERE id=?';
     const params = [id];
     const [rows] = await promisePool.query(sql, params);
-    console.log(rows);
     // if nothing is found with the user id, result array is empty []
     if (rows.length === 0) {
       return {error: 404, message: 'user not found'};
