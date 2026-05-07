@@ -166,11 +166,18 @@ export async function revokeProfessionalAccess() {
   });
 }
 
+// ── Käyttäjän poistaminen ──────────────────────────────────────────────────
+export const deleteAccount = async () => {
+  return await apiFetch('/user/delete', {
+    method: 'DELETE',
+  });
+};
+
 // ── Ammattilaisen API-kutsut ───────────────────────────────────────────────
 
 /** Luo kutsukoodin, joka linkittää käyttäjän ja ammattilaisen */
 export async function generateCode() {
-  return apiFetch('/pro/generate-code', { method: 'POST' });
+  return apiFetch('/pro/generate-code', {method: 'POST'});
 }
 
 /** Hakee kaikki potilaat, jotka ovat linkittäneet tilinsä tälle ammattilaiselle */
@@ -200,7 +207,7 @@ export async function getPatientDailyLogs(patientId, start, end) {
 export async function updateReportFeedback(reportId, feedback) {
   return apiFetch(`/pro/reports/feedback`, {
     method: 'PUT',
-    body: JSON.stringify({ reportId, feedback }),
+    body: JSON.stringify({reportId, feedback}),
   });
 }
 

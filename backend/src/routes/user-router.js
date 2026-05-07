@@ -25,6 +25,9 @@ userRouter.put(
   UserController.updateShareDataPermissions,
 );
 
+// Delete users account and its data
+userRouter.delete('/delete', UserController.deleteUser);
+
 userRouter.delete(
   '/patient/revoke',
   UserController.revokeAccess,

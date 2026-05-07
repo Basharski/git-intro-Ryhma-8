@@ -1,4 +1,7 @@
-/* Professional Dashboard Specifics */
+/*
+Professional Dashboard Specifics
+Tämä tiedosto on luotu Googlen Gemini 3 Pro tekoälymallilla
+*/
 
 .patient-header {
     display: flex;
@@ -45,12 +48,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    list-style: none; /* Poistaa oletusnuolen */
+    list-style: none;
     font-weight: 600;
 }
 
 .pro-report-summary::-webkit-details-marker {
-    display: none; /* Safarille */
+    display: none;
 }
 
 .pro-report-summary__left {

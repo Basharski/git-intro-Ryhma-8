@@ -38,6 +38,16 @@ export const updateUserProfile = async (req, res, next) => {
   }
 };
 
+export const deleteUser = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    await UserModel.deleteUserData(userId);
+    res.json({message: 'Tili ja kaikki tiedot poistettu onnistuneesti.'});
+  } catch (err) {
+    res.status(500).json({error: 'Tilin poistaminen epäonnistui.'});
+  }
+};
+
 // Claims the invitation code and creates a link between user and professional
 export const claimCode = async (req, res, next) => {
   try {
@@ -67,12 +77,8 @@ export const claimCode = async (req, res, next) => {
 
     console.log('DATA: ', proId, userId, defaultPermissions);
 
-    await UserModel.createPatientProLink(
-      proId,
-      userId,
-      defaultPermissions,
-    );
-    await UserModel.updatePatientProCode(userId, shareCode)
+    await UserModel.createPatientProLink(proId, userId, defaultPermissions);
+    await UserModel.updatePatientProCode(userId, shareCode);
     await UserModel.deleteInviteCode(shareCode);
 
     res.status(201).json({message: 'Successfully linked!'});
@@ -107,7 +113,7 @@ export const updateShareDataPermissions = async (req, res, next) => {
 export const revokeAccess = async (req, res, next) => {
   try {
     const patientId = req.user.userId;
-    console.log(patientId)
+    console.log(patientId);
 
     await UserModel.removePatientProLink(patientId);
 

@@ -43,6 +43,7 @@ export const selectUserByEmail = async (email, includePassword = false) => {
   }
 };
 
+// Selects user by their ID
 export const selectUserById = async (id) => {
   try {
     const sql =
@@ -61,6 +62,7 @@ export const selectUserById = async (id) => {
   }
 };
 
+// Updates users data by their ID
 export const updateUserDataById = async (userId, data) => {
   const {name, height, weight} = data;
 
@@ -73,7 +75,28 @@ export const updateUserDataById = async (userId, data) => {
   return result.affectedRows > 0;
 };
 
-// --- FUNCTIONS FOR USER-PROFESSIONAL LINKS ---
+export const deleteUserData = async (userId) => {
+  try {
+    // Delete user-professional link
+    await promisePool.execute('DELETE FROM patient_pro_links WHERE patient_id = ? ',[userId]);
+
+    // Delete weekly reports
+    await promisePool.execute('DELETE FROM weekly_reports WHERE user_id = ?', [userId]);
+
+    // Delete Kubios data and diary entries
+    await promisePool.execute('DELETE FROM kubios_results WHERE user_id = ?', [userId]);
+    await promisePool.execute('DELETE FROM user_entries WHERE user_id = ?', [userId]);
+
+    // Delete the user itself
+    await promisePool.execute('DELETE FROM users WHERE id = ?', [userId]);
+    return {success: true};
+  } catch (err) {
+    console.error('deleteUserData', err);
+    return {error: 500, message: 'DB error'};
+  }
+};
+
+// --- FUNCTIONS FOR USER-PROFESSIONAL LINK ---
 
 // Checks the database if there is a invitation code
 export const findInviteCode = async (code) => {
@@ -89,7 +112,6 @@ export const deleteInviteCode = async (code) => {
   await promisePool.execute('DELETE FROM connection_codes WHERE code = ?', [
     code,
   ]);
-  console.log('DELETED CODE');
 };
 
 //
@@ -142,8 +164,7 @@ export const removePatientProLink = async (userId) => {
   );
 
   // Remove share code from users information
-  await promisePool.execute(
-    'UPDATE users SET pro_code = NULL WHERE id = ?',
-    [userId],
-  );
+  await promisePool.execute('UPDATE users SET pro_code = NULL WHERE id = ?', [
+    userId,
+  ]);
 };
