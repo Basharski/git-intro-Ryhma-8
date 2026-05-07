@@ -117,7 +117,7 @@
 
 .delete-entry:hover {
   filter: grayscale(0) sepia(1) hue-rotate(-50deg) saturate(5);
-
+}
 /* --- KORTIN TOIMINTOPAINIKKEET --- */
 .diary-item__header-top {
   display: flex;
@@ -205,5 +205,4 @@
 .diary-list::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 10px;
-}
 }

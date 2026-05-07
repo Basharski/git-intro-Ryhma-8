@@ -47,6 +47,45 @@
             <!-- JS täyttää -->
           </div>
         </section>
+        <!-- USERS DIARY ENTRY EDITING OVERLAY -->
+
+        <div id="edit-entry-modal" class="modal-overlay hidden">
+          <div class="modal-content">
+            <h3 style="margin-bottom: 1.5rem">Muokkaa merkintää</h3>
+
+            <div class="form-group">
+              <label for="edit-mood">Mieliala</label>
+              <input type="range" id="edit-mood" min="1" max="5" step="1" />
+              <div class="range-labels">
+                <span>😄</span><span>🙂</span><span>😐</span><span>😔</span
+                ><span>😟</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-workload">Kuormitus (1-5)</label>
+              <input type="range" id="edit-workload" min="1" max="5" step="1" />
+            </div>
+
+            <div class="form-group">
+              <label for="edit-message">Vapaa sana</label>
+              <textarea
+                id="edit-message"
+                rows="4"
+                placeholder="Kirjoita mietteitäsi..."
+              ></textarea>
+            </div>
+
+            <div class="modal-actions">
+              <button id="cancel-edit-btn" class="btn btn-secondary">
+                Peruuta
+              </button>
+              <button id="save-edit-btn" class="btn btn-primary">
+                Tallenna muutokset
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
