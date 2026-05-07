@@ -1,6 +1,5 @@
 import {
   getReportsByUserId,
-  updateProComment,
   generateReportsForUser,
   getLatestReportByUserId,
 } from '../models/weekly-report-model.js';
@@ -18,28 +17,6 @@ export const getUserReports = async (req, res) => {
     res.json({reports});
   } catch (err) {
     console.error('getPatientReports Error:', err);
-    res.status(500).json({message: 'Internal server error'});
-  }
-};
-
-// Professional can add their comment on the users weekly reports
-export const addCommentToReport = async (req, res) => {
-  const reportId = req.user.reportId;
-  const {comment} = req.body;
-
-  if (!comment) {
-    return res.status(400).json({message: 'Comment text is required'});
-  }
-
-  try {
-    const result = await updateProComment(reportId, comment);
-    if (result.error) {
-      return res.status(result.error).json({message: result.message});
-    }
-
-    res.json({message: 'Comment saved successfully'});
-  } catch (err) {
-    console.error('addCommentToReport Error:', err);
     res.status(500).json({message: 'Internal server error'});
   }
 };

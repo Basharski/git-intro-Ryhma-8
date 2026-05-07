@@ -1,43 +1,6 @@
 import promisePool from '../utils/database.js';
 
-// --- CONNECTION CODES ---
-
-export const createInviteCode = async (code, proId) => {
-  await promisePool.execute(
-    'INSERT INTO connection_codes (code, pro_id) VALUES (?, ?)',
-    [code, proId],
-  );
-};
-
-export const findInviteCode = async (code) => {
-  const [rows] = await promisePool.execute(
-    'SELECT pro_id FROM connection_codes WHERE code = ?',
-    [code],
-  );
-  return rows[0]; // Returns the row if found, undefined if not
-};
-
-export const deleteInviteCode = async (code) => {
-  await promisePool.execute('DELETE FROM connection_codes WHERE code = ?', [
-    code,
-  ]);
-  console.log('DELETED CODE');
-};
-
 // --- PRO/PATIENT LINKS ---
-
-export const getLinkedPatients = async (proId) => {
-  const [rows] = await promisePool.execute(
-    `
-    SELECT u.id, u.name, u.email, p.permissions, p.created_at as linked_at
-    FROM users u
-    JOIN patient_pro_links p ON u.id = p.patient_id
-    WHERE p.pro_id = ?
-  `,
-    [proId],
-  );
-  return rows;
-};
 
 export const getLinkDetails = async (proId, patientId) => {
   const [rows] = await promisePool.execute(
@@ -91,7 +54,15 @@ export const removePatientProLink = async (userId) => {
   );
 };
 
-// --- PATIENT DATA (For Pro View) ---
+// --- PROFESSIONAL FUNCTIONS (For Pro View) ---
+
+// Creates a 6 character code that links a user and a professional if used
+export const createInviteCode = async (code, proId) => {
+  await promisePool.execute(
+    'INSERT INTO connection_codes (code, pro_id) VALUES (?, ?)',
+    [code, proId],
+  );
+};
 
 export const getRecentMeasurements = async (patientId, limit = 30) => {
   const [rows] = await promisePool.execute(
@@ -99,4 +70,34 @@ export const getRecentMeasurements = async (patientId, limit = 30) => {
     [patientId, limit.toString()],
   );
   return rows;
+};
+
+// Gets all linked user to a specific professional
+export const getLinkedPatients = async (proId) => {
+  const [rows] = await promisePool.execute(
+    `
+    SELECT u.id, u.name, u.email, p.permissions, p.created_at as linked_at
+    FROM users u
+    JOIN patient_pro_links p ON u.id = p.patient_id
+    WHERE p.pro_id = ?
+  `,
+    [proId],
+  );
+  return rows;
+};
+
+// Professional can add their comment on the weekly report
+export const updateProComment = async (reportId, comment) => {
+  try {
+    const sql = 'UPDATE weekly_reports SET pro_comment = ? WHERE id = ?';
+    const [result] = await promisePool.query(sql, [comment, reportId]);
+
+    if (result.affectedRows === 0) {
+      return { error: 404, message: 'Report not found' };
+    }
+    return { success: true };
+  } catch (error) {
+    console.error('updateProComment error:', error);
+    return { error: 500, message: 'db error' };
+  }
 };

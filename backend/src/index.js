@@ -6,7 +6,7 @@ import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
 import hrvEntryRouter from './routes/hrv-data-router.js';
 import entryRouter from './routes/entry-router.js';
-import sharingRouter from './routes/sharing-router.js';
+import proRouter from './routes/pro-router.js';
 import reportRouter from './routes/weekly-report-router.js';
 const hostname = '127.0.0.1';
 const app = express();
@@ -36,8 +36,8 @@ app.use('/api/hrv', hrvEntryRouter);
 // User entries router
 app.use('/api/entry', entryRouter);
 
-// User data sharing with professional router
-app.use('/api/sharing', sharingRouter);
+// Professionals routes
+app.use('/api/pro', proRouter);
 
 // Route for weekly reports
 app.use('/api/reports', reportRouter);

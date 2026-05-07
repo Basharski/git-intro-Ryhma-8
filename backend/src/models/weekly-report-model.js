@@ -12,22 +12,6 @@ export const getReportsByUserId = async (userId) => {
   }
 };
 
-// Professional can add their comment on the weekly report
-export const updateProComment = async (reportId, comment) => {
-  try {
-    const sql = 'UPDATE weekly_reports SET pro_comment = ? WHERE id = ?';
-    const [result] = await promisePool.query(sql, [comment, reportId]);
-
-    if (result.affectedRows === 0) {
-      return { error: 404, message: 'Report not found' };
-    }
-    return { success: true };
-  } catch (error) {
-    console.error('updateProComment error:', error);
-    return { error: 500, message: 'db error' };
-  }
-};
-
 // Gets the latest weekly report
 export const getLatestReportByUserId = async (userId) => {
   try {
