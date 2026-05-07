@@ -5,19 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analyysi | Terveyssovellus</title>
     <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/analysis.css" />
   </head>
   <body>
-    <nav class="navbar">
-      <a class="navbar__brand" href="/src/home/index.html">TUES</a>
-      <div class="navbar__icons">
-        <a class="navbar__btn" href="/src/home/index.html" aria-label="Etusivu">
-          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        </a>
-        <a class="navbar__btn active" href="/src/analysis/index.html" aria-label="Analyysi">
-          <svg viewBox="0 0 24 24"><path d="M3.5 18.5l6-6 4 4L22 6.92M21 21H3V3"/></svg>
-        </a>
-      </div>
-    </nav>
+    <load src="/src/partials/navbar.html" />
 
     <main class="page">
       <h1 class="section-title">Analyysi</h1>
@@ -36,21 +27,83 @@
           <h2>RMSSD-aikasarja</h2>
           <canvas id="rmssd-chart"></canvas>
         </div>
-
         <div class="chart-wrapper">
           <h2>Stressitaso</h2>
           <canvas id="stress-chart"></canvas>
         </div>
       </div>
+
+      <div class="analysis-grid">
+        <section class="card">
+          <h2 class="section-title">Viikkoraportit</h2>
+          <div id="weekly-reports-list">
+            <!-- JS täyttää -->
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title">Omat merkinnät</h2>
+          <div class="diary-list" id="diary-entries-list">
+            <!-- JS täyttää -->
+          </div>
+        </section>
+        <!-- USERS DIARY ENTRY EDITING OVERLAY -->
+
+        <div id="edit-entry-modal" class="modal-overlay hidden">
+          <div class="modal-content">
+            <h3 style="margin-bottom: 1.5rem">Muokkaa merkintää</h3>
+
+            <div class="form-group">
+              <label for="edit-mood">Mieliala</label>
+              <input type="range" id="edit-mood" min="1" max="5" step="1" />
+              <div class="range-labels">
+                <span>😄</span><span>🙂</span><span>😐</span><span>😔</span
+                ><span>😟</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-workload">Kuormitus (1-5)</label>
+              <input type="range" id="edit-workload" min="1" max="5" step="1" />
+            </div>
+
+            <div class="form-group">
+              <label for="edit-message">Vapaa sana</label>
+              <textarea
+                id="edit-message"
+                rows="4"
+                placeholder="Kirjoita mietteitäsi..."
+              ></textarea>
+            </div>
+
+            <div class="modal-actions">
+              <button id="cancel-edit-btn" class="btn btn-secondary">
+                Peruuta
+              </button>
+              <button id="save-edit-btn" class="btn btn-primary">
+                Tallenna muutokset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
-    <div id="snackbar"></div>
+    <load src="/src/partials/overlays.html" />
+
     <script type="module">
-      import { requireAuth, applyTheme } from '../js/api.js';
-      import { init } from '../js/analysis.js';
-      applyTheme();
+      import {requireAuth} from '../js/api.js';
+      import {initLayout} from '../js/layout.js';
+      import {init} from '../js/analysis.js';
+      import {loadWeeklyReports} from '../js/weekly-report.js';
+
       requireAuth();
-      init();
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initLayout();
+        init();
+        loadWeeklyReports();
+      });
     </script>
   </body>
 </html>

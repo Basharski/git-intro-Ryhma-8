@@ -1,9 +1,11 @@
 /* ================================================================
    TUES – Työuupumuksen Ennaltaehkäisevä Seuranta
    Global Stylesheet
+
+   Tiedoston kommentointiin on käytetty Googlen Gemini 3 Pro tekoälymallia
    ================================================================ */
 
-/* --- CSS-muuttujat: vaalea teema (oletus) --- */
+/* --- 1. MUUTTUJAT JA TEEMAT (VAALEA & TUMMA) --- */
 :root {
   --color-bg: #f4f7f6;
   --color-surface: #ffffff;
@@ -24,10 +26,9 @@
   --radius-sm: 6px;
   --transition: 0.2s ease;
   --font: 'Segoe UI', system-ui, sans-serif;
-  --max-width: 900px;
+  --max-width: 1200px;
 }
 
-/* --- CSS-muuttujat: tumma teema --- */
 [data-theme='dark'] {
   --color-bg: #121a17;
   --color-surface: #1e2e27;
@@ -45,8 +46,10 @@
   --color-nav-text: #e8f0ec;
 }
 
-/* --- Perusta --- */
-*, *::before, *::after {
+/* --- 2. PERUSASETUKSET (RESET & BODY) --- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -57,11 +60,13 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
-  transition: background-color var(--transition), color var(--transition);
+  transition:
+    background-color var(--transition),
+    color var(--transition);
   line-height: 1.6;
 }
 
-/* --- Navigaatiopalkin --- */
+/* --- 3. NAVIGAATIOPALKKI --- */
 .navbar {
   background: var(--color-nav-bg);
   color: var(--color-nav-text);
@@ -115,14 +120,14 @@ body {
   fill: currentColor;
 }
 
-/* --- Pääsisältöalue --- */
+/* --- 4. YLEINEN LAYOUT JA KOMPONENTIT --- */
 .page {
   max-width: var(--max-width);
   margin: 2rem auto;
   padding: 0 1rem;
 }
 
-/* --- Kortit --- */
+/* Kortit */
 .card {
   background: var(--color-surface);
   border-radius: var(--radius);
@@ -164,7 +169,7 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* --- Lomakkeet --- */
+/* --- 5. LOMAKKEET JA NAPIT --- */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -186,7 +191,9 @@ body {
   color: var(--color-text);
   font-size: 0.95rem;
   font-family: var(--font);
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
 }
 
 .form-input:focus {
@@ -195,7 +202,6 @@ body {
   box-shadow: 0 0 0 3px rgba(45, 122, 92, 0.15);
 }
 
-/* --- Napit --- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -208,25 +214,38 @@ body {
   font-weight: 600;
   font-family: var(--font);
   cursor: pointer;
-  transition: background var(--transition), opacity var(--transition), transform var(--transition);
+  transition:
+    background var(--transition),
+    opacity var(--transition),
+    transform var(--transition);
 }
 
-.btn:active { transform: scale(0.98); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:active {
+  transform: scale(0.98);
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .btn--primary {
   background: var(--color-primary);
   color: #fff;
   width: 100%;
 }
-.btn--primary:hover:not(:disabled) { background: var(--color-primary-dark); }
+.btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
 
 .btn--secondary {
   background: var(--color-surface-2);
   color: var(--color-primary);
   border: 1.5px solid var(--color-primary);
 }
-.btn--secondary:hover { background: var(--color-primary-light); color: #fff; }
+.btn--secondary:hover {
+  background: var(--color-primary-light);
+  color: #fff;
+}
 
 .btn--danger {
   background: transparent;
@@ -234,14 +253,17 @@ body {
   border: 1.5px solid var(--color-danger);
   width: 100%;
 }
-.btn--danger:hover { background: var(--color-danger); color: #fff; }
+.btn--danger:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
 
 .btn--sm {
   padding: 0.4rem 0.9rem;
   font-size: 0.85rem;
 }
 
-/* --- Overlay / Modal --- */
+/* --- 6. OVERLAY- JA MODAALITYYLIT --- */
 .overlay-backdrop {
   display: none;
   position: fixed;
@@ -251,8 +273,8 @@ body {
   justify-content: flex-end;
 }
 
-.overlay-backdrop.open {
-  display: flex;
+.overlay-backdrop.is-visible {
+  display: flex !important;
 }
 
 .overlay-panel {
@@ -295,7 +317,7 @@ body {
   line-height: 1;
 }
 
-/* --- Snackbar --- */
+/* --- 7. ILMOITUKSET (SNACKBAR) --- */
 #snackbar {
   position: fixed;
   bottom: 1.5rem;
@@ -309,7 +331,9 @@ body {
   font-weight: 500;
   z-index: 500;
   opacity: 0;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
   white-space: nowrap;
   box-shadow: 0 4px 12px var(--color-shadow);
 }
@@ -319,10 +343,17 @@ body {
   opacity: 1;
 }
 
-#snackbar.success { background: var(--color-primary); color: #fff; }
-#snackbar.error   { background: var(--color-danger); color: #fff; }
+#snackbar.success {
+  background: var(--color-primary);
+  color: #fff;
+}
+#snackbar.error {
+  background: var(--color-danger);
+  color: #fff;
+}
 
-/* --- Toggle / Switch --- */
+/* --- 8. UI-ELEMENTIT (KYTKIMET, MERKIT, GRAAFIT) --- */
+/* Toggle / Switch */
 .toggle-row {
   display: flex;
   align-items: center;
@@ -344,7 +375,8 @@ body {
 
 .toggle-switch input {
   opacity: 0;
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
 }
 
 .toggle-slider {
@@ -359,17 +391,23 @@ body {
 .toggle-slider::before {
   content: '';
   position: absolute;
-  width: 18px; height: 18px;
-  left: 3px; top: 3px;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
   background: white;
   border-radius: 50%;
   transition: transform var(--transition);
 }
 
-.toggle-switch input:checked + .toggle-slider { background: var(--color-primary); }
-.toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--color-primary);
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
 
-/* --- Section-otsikot --- */
+/* Section-otsikot */
 .section-title {
   font-size: 1.15rem;
   font-weight: 700;
@@ -377,9 +415,13 @@ body {
   color: var(--color-text);
 }
 
-/* --- Tervehdysviesti --- */
+/* Tervehdysviesti */
 .greeting {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
   color: #fff;
   border-radius: var(--radius);
   padding: 1.5rem 2rem;
@@ -398,7 +440,7 @@ body {
   opacity: 0.85;
 }
 
-/* --- Analyysisivu --- */
+/* --- 9. ANALYYSI JA GRAAFINHALLINTA --- */
 .analysis-controls {
   display: flex;
   align-items: center;
@@ -456,7 +498,7 @@ body {
   max-height: 400px;
 }
 
-/* --- Exercise-kortit --- */
+/* --- 10. HARJOITUSKORTIT JA PÄIVÄKIRJA --- */
 .exercise-card {
   background: var(--color-surface-2);
   border-radius: var(--radius);
@@ -472,7 +514,7 @@ body {
   line-height: 1;
 }
 
-.exercise-card__body {}
+.exercise-card__body { }
 .exercise-card__name {
   font-weight: 700;
   margin-bottom: 0.2rem;
@@ -482,7 +524,201 @@ body {
   color: var(--color-text-secondary);
 }
 
-/* --- Auth-sivu --- */
+@media (max-width: 850px) {
+  .analysis-grid { grid-template-columns: 1fr; }
+}
+
+/* --- 11. RAPORTTITYYLIT --- */
+.report-item {
+  padding: 1.25rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 2px solid var(--color-border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.report-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.report-item__stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.mini-stat {
+  background: var(--color-surface);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  border: 1px solid var(--color-border);
+}
+
+.mini-stat__label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.mini-stat__value {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Badges */
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: inline-block;
+}
+
+.badge--success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.badge--warning {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fbbf24;
+}
+
+.badge--danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+
+/* Pro Notes */
+.report-item__pro-note {
+  background: #fff9e6;
+  border-left: 4px solid #f1c40f;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.85rem;
+  color: #5d4037;
+}
+
+[data-theme='dark'] .report-item {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .report-item__pro-note {
+  background: #2d2a1e;
+  color: #e0d0b0;
+  border-left-color: #f1c40f;
+}
+
+/* --- 12. PROFIILI OVERLAY JA NAV BARIN LAAJENNUS --- */
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.profile-trigger:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.avatar-circle {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.profile-overlay {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 1rem;
+  width: 280px;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  z-index: 1000;
+  padding: 1.25rem;
+}
+
+.profile-overlay.show {
+  display: block;
+  animation: fadeInDown 0.2s ease-out;
+}
+
+.profile-overlay__header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.profile-overlay__header h4 { margin: 0; font-size: 1rem; }
+.profile-overlay__header p { margin: 0; font-size: 0.8rem; color: #888; }
+
+.invite-section label {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.invite-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg-alt);
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px dashed var(--color-border);
+    margin: 0.75rem 0;
+    min-height: 50px;
+}
+
+#generated-code {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--text-color);
+}
+
+#generated-code.has-code {
+    color: var(--color-primary);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- 14. AUTH- JA KIRJAUTUMISSIVU --- */
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -490,7 +726,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: linear-gradient(160deg, var(--color-primary-dark), var(--color-bg) 60%);
+  background: linear-gradient(
+    160deg,
+    var(--color-primary-dark),
+    var(--color-bg) 60%
+  );
 }
 
 .auth-box {
@@ -547,7 +787,7 @@ body {
 .auth-form { display: none; }
 .auth-form.active { display: block; }
 
-/* --- Radio group (asetukset) --- */
+/* --- 15. ASETUKSET JA RADIO-VALINNAT --- */
 .radio-group {
   display: flex;
   flex-direction: column;
@@ -564,17 +804,27 @@ body {
 
 .radio-option input { accent-color: var(--color-primary); }
 
-/* --- Placeholder/tyhjä tila --- */
+/* --- 16. APUOHJELMAT JA TILAVÄRIT --- */
+.text-success { color: var(--color-primary) !important; }
+.text-warning { color: #f1c40f !important; }
+.text-danger { color: var(--color-danger) !important; }
+
+[data-theme='dark'] .text-warning { color: #ffdb4d !important; }
+
+/* Placeholder/tyhjä tila */
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
   color: var(--color-text-secondary);
 }
 
-.empty-state__icon { font-size: 3rem; margin-bottom: 0.75rem; }
+.empty-state__icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
 .empty-state__text { font-size: 0.95rem; }
 
-/* --- Responsiivisuus --- */
+/* --- 17. RESPONSIIVISUUS JA MEDIA-KYSELYT --- */
 @media (max-width: 600px) {
   .page { margin: 1rem auto; }
   .auth-box { padding: 1.5rem 1rem; }

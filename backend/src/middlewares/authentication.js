@@ -14,8 +14,16 @@ const authenticateToken = (req, res, next) => {
     next();
   } catch (error) {
     console.log('token verification failed', error);
-    res.status(403).send({message: 'invalid token'});
+    res.status(401).send({message: 'invalid token'});
   }
 };
 
-export {authenticateToken};
+// Stops the user from accessing professional only endpoints
+const requireProfessional = (req, res, next) => {
+  if (req.user.role !== 'pro') {
+    return res.status(403).json({ message: 'Access denied. Professionals only.' });
+  }
+  next();
+};
+
+export {authenticateToken, requireProfessional};

@@ -15,8 +15,9 @@ export function getToken() {
   return localStorage.getItem('tues_token');
 }
 
-export function clearToken() {
+export function clearLocalStorage() {
   localStorage.removeItem('tues_token');
+  localStorage.removeItem('userId');
 }
 
 export function isLoggedIn() {
@@ -43,7 +44,7 @@ async function apiFetch(path, options = {}) {
   const token = getToken();
   const headers = {
     'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(token ? {Authorization: `Bearer ${token}`} : {}),
     ...options.headers,
   };
 
@@ -71,9 +72,9 @@ async function apiFetch(path, options = {}) {
 
 /** POST /api/login – Kirjautuminen, palauttaa JWT-tokenin */
 export async function login(email, password) {
-  const data = await apiFetch('/users/login', {
+  const data = await apiFetch('/user/login', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({email, password}),
   });
   saveToken(data.token);
   return data;
@@ -83,13 +84,13 @@ export async function login(email, password) {
 export async function register(email, password) {
   return apiFetch('/users', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({email, password}),
   });
 }
 
 /** Uloskirjautuminen (paikallinen) */
 export function logout() {
-  clearToken();
+  clearLocalStorage();
   window.location.href = '/src/auth/login.html';
 }
 
@@ -100,10 +101,10 @@ export async function getProfile() {
   return apiFetch('/user/profile');
 }
 
-/** PUT /api/user/profile – Päivitä profiilitiedot */
+/** PATCH /api/user/profile – Päivitä profiilitiedot */
 export async function updateProfile(profileData) {
   return apiFetch('/user/profile', {
-    method: 'PUT',
+    method: 'PATCH',
     body: JSON.stringify(profileData),
   });
 }
@@ -115,18 +116,34 @@ export async function getHrvData() {
   return apiFetch('/hrv/data');
 }
 
-/** POST /api/hrv/fetch – Käynnistää HRV-datan noudon Kubioksesta */
+/** GET /api/hrv/data/latest - Palauttaa uusimman HRV-mittauksen
+ * ja personoidut harjoitteet tietokannasta
+ */
+export async function getLatestHrvData() {
+  return apiFetch('/hrv/data/latest');
+}
+
+/** POST /api/hrv/data/sync – Käynnistää HRV-datan noudon Kubioksesta
+ * Palauttaa viimeisimmän Kubios datan ja personoidut harjoitteet
+ */
 export async function fetchHrvFromKubios() {
-  return apiFetch('/hrv/fetch', { method: 'POST' });
+  return apiFetch('/hrv/data/sync', {method: 'POST'});
+}
+
+// -- Viikottaiset raportit ──────────────────────────────────────────────────
+
+/** GET /api/reports/user/:userId - Palauttaa tietyn käyttäjän viikkoraportit */
+export async function getWeeklyReports() {
+  return apiFetch(`/reports/user`);
 }
 
 // ── Mieliala / kuormitus ───────────────────────────────────────────────────
 
-/** POST /api/mood – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
-export async function saveMood(mood, workload) {
-  return apiFetch('/mood', {
+/** POST /api/entry – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
+export async function saveMood(mood, workload, message) {
+  return apiFetch('/entry', {
     method: 'POST',
-    body: JSON.stringify({ mood, workload }),
+    body: JSON.stringify({mood, workload, message}),
   });
 }
 
@@ -139,11 +156,82 @@ export async function getRecommendations() {
 
 // ── Datan jakaminen ammattilaiselle ────────────────────────────────────────
 
-/** POST /api/share – Jakaa dataa ammattilaiselle */
-export async function shareWithProfessional(professionalId) {
-  return apiFetch('/share', {
+/** POST /api/sharing/patient/claim-code – Jakaa dataa ammattilaiselle */
+export async function shareWithProfessional(shareCode) {
+  return apiFetch('/user/patient/claim-code', {
     method: 'POST',
-    body: JSON.stringify({ professionalId }),
+    body: JSON.stringify({shareCode}),
+  });
+}
+
+export async function revokeProfessionalAccess() {
+  return apiFetch('/user/patient/revoke', {
+    method: 'DELETE',
+  });
+}
+
+// ── Käyttäjän omat päiväkirjamerkinnät ─────────────────────────────────────
+export const fetchUserEntries = async () => {
+  return await apiFetch('/entry');
+};
+
+/** PATCH /api/entry/:id - Muokkaa käyttäjän tekemää päiväkirjamarkintää */
+export async function changeUserEntry(entryId, updatedData) {
+  return apiFetch(`/entry/${entryId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updatedData),
+  });
+}
+
+/** DELETE /api/entry/:id - Poistaa käyttän tekemän päiväkirjamerkinnän */
+export async function deleteUserEntry(entryId) {
+  return apiFetch(`/entry/${entryId}`, {
+    method: 'DELETE',
+  });
+}
+
+// ── Käyttäjän poistaminen ──────────────────────────────────────────────────
+export const deleteAccount = async () => {
+  return await apiFetch('/user/delete', {
+    method: 'DELETE',
+  });
+};
+
+// ── Ammattilaisen API-kutsut ───────────────────────────────────────────────
+
+/** Luo kutsukoodin, joka linkittää käyttäjän ja ammattilaisen */
+export async function generateCode() {
+  return apiFetch('/pro/generate-code', {method: 'POST'});
+}
+
+/** Hakee kaikki potilaat, jotka ovat linkittäneet tilinsä tälle ammattilaiselle */
+export async function getPatients() {
+  return apiFetch('/pro/patients');
+}
+
+/** * Hakee tietyn potilaan viikkoraportit
+ * Polku vastaa backendin: /api/pro/patients/:id/reports
+ */
+export async function getPatientReports(patientId) {
+  return apiFetch(`/pro/patients/${patientId}/reports`);
+}
+
+/** * Hakee tarkat päivätason tiedot (Kubios + Päiväkirja) tietyltä väliltä
+ * Käytetään haitari-näkymän graafeihin.
+ * @param {string} start - 'YYYY-MM-DD'
+ * @param {string} end - 'YYYY-MM-DD'
+ */
+export async function getPatientDailyLogs(patientId, start, end) {
+  return apiFetch(`/pro/patients/${patientId}/daily?start=${start}&end=${end}`);
+}
+
+/** * Päivittää ammattilaisen kommentin tiettyyn raporttiin
+ * Polku vastaa backendin PATCH-reittiä
+ */
+export async function updateReportFeedback(reportId, feedback) {
+  return apiFetch(`/pro/reports/feedback`, {
+    method: 'PUT',
+    body: JSON.stringify({reportId, feedback}),
   });
 }
 
@@ -172,7 +260,8 @@ export function applyTheme() {
 }
 
 export function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') ?? 'light';
+  const current =
+    document.documentElement.getAttribute('data-theme') ?? 'light';
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('tues_theme', next);

@@ -4,7 +4,10 @@ import cors from 'cors';
 import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
-import entryRouter from './routes/hrv-router.js';
+import hrvEntryRouter from './routes/hrv-data-router.js';
+import entryRouter from './routes/entry-router.js';
+import proRouter from './routes/pro-router.js';
+import reportRouter from './routes/weekly-report-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 8000;
@@ -21,19 +24,29 @@ app.use(requestLogger);
 
 // API root
 app.get('/api', (req, res) => {
-  res.send('Teacher example Health Diary API!');
+  res.send('API');
 });
 
 // Users resource router for all /api/users routes
-app.use('/api/users', userRouter);
+app.use('/api/user', userRouter);
 
 // HRV data router
-app.use('/api/hrv', entryRouter);
+app.use('/api/hrv', hrvEntryRouter);
+
+// User entries router
+app.use('/api/entry', entryRouter);
+
+// Professionals routes
+app.use('/api/pro', proRouter);
+
+// Route for weekly reports
+app.use('/api/reports', reportRouter);
 
 // jos pyyntö ei "mätsää" minkään ylläolevan reitin kanssa, kyseessä on 404-tilanne
 app.use(notFoundHandler);
 // virheenkäsittelijälle ohjataa kaikki pyynnöt, jossa mukana on error objekti
 app.use(errorHandler);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

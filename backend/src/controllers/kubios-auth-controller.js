@@ -14,9 +14,9 @@
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import fetch from 'node-fetch';
+import bcrypt from 'bcryptjs';
 import {v4} from 'uuid';
 import {customError} from '../middlewares/error-handlers.js';
-// customError function not created in this project
 import {
   addUser,
   selectUserByEmail,
@@ -114,14 +114,17 @@ const syncWithLocalUser = async (kubiosUser) => {
   if (result.error) {
     // Create user
     const newUser = {
-      given_name: kubiosUser.given_name,
+      name: kubiosUser.given_name,
       email: kubiosUser.email,
       // Random password, quick workaround for the required field
       password: v4(),
-      height: kubiosUser.height,
+      // Change the height to cm
+      height: kubiosUser.height * 100,
       weight: kubiosUser.weight,
-      birthdate: kubiosUser.birthdate
+      date_of_birth: kubiosUser.birthdate,
     };
+    console.log('RESULT: ', result);
+    console.log('NEW USER: ', newUser);
     const newUserResult = await addUser(newUser);
     userId = newUserResult.id;
   } else {
@@ -132,41 +135,93 @@ const syncWithLocalUser = async (kubiosUser) => {
 };
 
 /**
- * User login
+ * User & Professional login
  * @async
  * @param {object} req
  * @param {object} res
  * @param {function} next
- * @return {object} user if username & password match
  */
 const postLogin = async (req, res, next) => {
   const {email, password} = req.body;
+
   try {
-    // Try to login with Kubios
-    const kubiosIdToken = await kubiosLogin(email, password);
-    const kubiosUser = await kubiosUserInfo(kubiosIdToken);
-    const localUserId = await syncWithLocalUser(kubiosUser);
-    // Include kubiosIdToken in the auth token used in this app
+    // Check if the local database has professionals account
+    const localUser = await selectUserByEmail(email, true);
+
+    if (!localUser.error && localUser.role === 'pro') {
+      const match = await bcrypt.compare(password, localUser.password);
+      if (!match) {
+        return res.status(401).json({message: 'Invalid credentials'});
+      }
+
+      const token = jwt.sign(
+        {userId: localUser.id, role: 'pro'},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRES_IN},
+      );
+
+      return res.json({
+        message: 'Professional login successful',
+        user: {
+          id: localUser.id,
+          name: localUser.name,
+          email: localUser.email,
+          role: localUser.role,
+        },
+        token,
+      });
+    }
+
+    // If credentials were not professionals move to Kubios login
+    let kubiosIdToken;
+    let kubiosUser;
+    let localUserId;
+
+    // Check for test credentials
+    if (
+      email === process.env.TEST_EMAIL &&
+      password === process.env.TEST_PASSWORD
+    ) {
+      console.log('--- Using test credentials ---');
+      kubiosIdToken = 'mock-id-token-1234';
+      kubiosUser = {
+        given_name: 'Test',
+        email: 'test@test.com',
+        height: '1.8',
+        weight: '75',
+        birthdate: '2000-01-01',
+      };
+      localUserId = await syncWithLocalUser(kubiosUser);
+    } else {
+      // Use Kubios account if credentials aren't test or pro credentials
+      kubiosIdToken = await kubiosLogin(email, password);
+      kubiosUser = await kubiosUserInfo(kubiosIdToken);
+      localUserId = await syncWithLocalUser(kubiosUser);
+    }
+
     const token = jwt.sign(
-      {userId: localUserId, kubiosIdToken},
+      {userId: localUserId, kubiosIdToken, role: 'user'},
       process.env.JWT_SECRET,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      },
+      {expiresIn: process.env.JWT_EXPIRES_IN},
     );
 
     return res.json({
-      message: 'Logged in successfully with Kubios',
-      user: kubiosUser,
+      message:
+        email === process.env.TEST_EMAIL
+          ? 'Logged in with test credentials'
+          : 'Logged in successfully with Kubios',
+      user: {
+        ...kubiosUser,
+        role: 'user',
+      },
       user_id: localUserId,
       token,
     });
   } catch (err) {
-    console.error('Kubios login error', err);
+    console.error('Login error', err);
     return next(err);
   }
 };
-
 /**
  * Get user info based on token
  * @async

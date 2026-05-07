@@ -52,13 +52,19 @@ loginBtn.addEventListener('click', async () => {
   msgEl.textContent = '';
 
   try {
-    await login(email, password);
+    const responseData = await login(email, password);
     setMessage(msgEl, 'Tervetuloa');
+
     setTimeout(() => {
-      window.location.href = '/src/home/index.html';
+      if (responseData && responseData.user && responseData.user.role === 'pro') {
+        window.location.href = '/src/professional/professional.html';
+      } else {
+        window.location.href = '/src/home/index.html';
+      }
     }, 600);
-  } catch {
+  } catch (err) {
     setMessage(msgEl, 'Kirjautuminen epäonnistui', true);
+    console.error('Login error:', err);
   } finally {
     loginBtn.disabled = false;
     loginBtn.textContent = 'Kirjaudu sisään';

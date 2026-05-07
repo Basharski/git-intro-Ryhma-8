@@ -1,0 +1,115 @@
+<!-- Tämän sivun HTML koodia on auttanut Googlen Gemini 3 Pro tekoälymalli kirjoittamaan-->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUES Pro - Professional Dashboard</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../professional/professional.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="./pro-dashboard.js"></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <a href="#" class="navbar__brand">TUES PRO</a>
+      <div class="navbar__icons">
+        <button class="navbar__btn" id="theme-toggle" title="Vaihda teema">
+          <svg viewBox="0 0 24 24" width="20">
+            <path d="M12 3V4.5M12 19.5V21M21 12H19.5M4.5 12H3M18.36 5.64L17.3 6.7M6.7 17.3L5.64 18.36M18.36 18.36L17.3 17.3M6.7 6.7L5.64 5.64M12 8C9.79 8 8 9.79 8 12C8 14.21 9.79 16 12 16C14.21 16 16 14.21 16 12C16 9.79 14.21 8 12 8Z" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+
+        <!-- Profile button -->
+        <button class="navbar__btn profile-trigger" id="profile-trigger">
+          <span id="pro-name">Ammattilainen</span>
+          <div class="avatar-circle">PRO</div>
+        </button>
+
+        <!-- Profile Overlay -->
+        <div class="profile-overlay" id="profile-overlay">
+          <div class="profile-overlay__header">
+            <h4 id="overlay-pro-name">Asiantuntija</h4>
+            <p>Ammattilaisprofiili</p>
+          </div>
+
+          <div class="profile-overlay__body">
+            <div class="invite-section">
+              <label>Potilaan kutsukoodi</label>
+              <div class="invite-box">
+                <span id="generated-code" class="code-placeholder"></span>
+                <button class="btn btn--sm btn--primary" id="btn-generate-code">Luo uusi</button>
+              </div>
+              <p class="text-xs" style="font-size: 0.9rem;" >Anna tämä koodi potilaalle linkitystä varten</p>
+            </div>
+          </div>
+
+          <div class="profile-overlay__footer">
+            <button class="btn btn--danger btn--full" id="btn-logout">Kirjaudu ulos</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="page">
+      <!-- Header Greeting -->
+      <header class="greeting">
+        <h1 class="greeting__text" id="welcome-text">Tervetuloa</h1>
+        <span class="pro_name"> Ammattilainen</span>
+      </header>
+
+      <div style="display: grid; grid-template-columns: 300px 1fr; gap: 2rem">
+        <!-- Sidebar: Patient List -->
+        <aside class="sidebar">
+          <h2 class="section-title">Potilaat</h2>
+          <div class="form-group">
+            <input type="text" class="form-input" placeholder="Etsi potilasta..." id="patient-search"/>
+          </div>
+
+          <!-- JS fills this list -->
+          <div id="patient-list-container" style="display: flex; flex-direction: column; gap: 0.75rem">
+            <p class="loading">Ladataan listaa...</p>
+          </div>
+        </aside>
+
+        <!-- Main Content: Patient Details -->
+        <section class="patient-detail-view">
+          <div class="patient-header">
+            <div>
+              <h2 class="section-title" id="active-patient-name">Valitse potilas</h2>
+            </div>
+            <div class="patient-actions">
+              <button class="btn btn--secondary btn--sm">Lataa kooste (PDF)</button>
+            </div>
+          </div>
+
+          <!-- Quick information boxes -->
+          <div class="card-grid card-grid--compact">
+            <div class="card card--stat">
+              <span class="card__label">Keskiarvo RMSSD</span>
+              <p class="card__value" id="stat-rmssd">-</p>
+            </div>
+            <div class="card card--stat">
+              <span class="card__label">Valmius</span>
+              <p class="card__value" id="stat-readiness">-</p>
+            </div>
+            <div class="card card--stat">
+              <span class="card__label">Tila</span>
+              <p class="card__value" id="stat-status">-</p>
+            </div>
+          </div>
+
+          <h3 class="section-title" style="margin-top: 2rem">Viikkohistoria & Raportit</h3>
+
+          <!-- JS fills this -->
+          <div id="pro-reports-list" class="pro-reports-list">
+             <p class="text-secondary">Ei valittua potilasta.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div id="snackbar">Palaute tallennettu!</div>
+  </body>
+</html>

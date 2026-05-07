@@ -13,10 +13,10 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "backend/src/index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon backend/src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
