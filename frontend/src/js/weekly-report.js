@@ -1,3 +1,5 @@
+/** Tämän sivun HTML koodin on kirjoittanut Googlen Gemini 3 tekoälymalli */
+
 import {getWeeklyReports} from '../js/api.js';
 
 // Loads the weekly reports and renders them

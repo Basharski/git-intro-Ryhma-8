@@ -1,0 +1,209 @@
+/* --- Tätä tiedostoa on auttanut Googlen Gemini 3 Pro tekoälymalli kirjoittamaan --- */
+/* --- 1. SIVUN PERUSASETUKSET --- */
+* {
+  box-sizing: border-box;
+}
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  max-width: 100%;
+}
+
+@media (max-width: 950px) {
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- 2. KORTIN RAKENNE (Kriittinen osa) --- */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  height: 80vh;
+  min-height: 500px;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.card .section-title {
+  padding: 1.5rem;
+  margin: 0;
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+/* --- 3. SKROLLAAVA LISTA (Tämä korjaa ongelman) --- */
+#weekly-reports-list,
+.diary-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: var(--color-surface-2, #f8fafc);
+  padding-bottom: 100px;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* --- 4. MERKINTÄKORTIT --- */
+.diary-item {
+  width: 100%;
+  flex-shrink: 0;
+  background: var(--color-surface);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  border-left: 6px solid var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.diary-item__text {
+  margin-top: 1rem;
+  line-height: 1.6;
+  font-size: 1.05rem;
+  padding: 1rem;
+  background: rgba(var(--color-primary-rgb, 59, 130, 246), 0.05);
+  border-radius: var(--radius-sm);
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.diary-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+  margin-right: 1rem;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.diary-item:hover .diary-item__actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.btn-icon:hover {
+  background: var(--color-surface-2);
+}
+
+.delete-entry:hover {
+  filter: grayscale(0) sepia(1) hue-rotate(-50deg) saturate(5);
+
+/* --- KORTIN TOIMINTOPAINIKKEET --- */
+.diary-item__header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.diary-item__actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0.2;
+  transition: opacity 0.2s ease;
+}
+
+.diary-item:hover .diary-item__actions {
+  opacity: 1;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.action-btn:hover { background: var(--color-surface-2, #e2e8f0); }
+.btn-delete:hover { background: #fee2e2; }
+
+/* --- MUOKKAUS OVERLAY --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 9999;
+  opacity: 1; transition: opacity 0.2s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0; pointer-events: none;
+}
+
+.modal-content {
+  background: var(--color-surface, #fff);
+  padding: 2rem;
+  border-radius: var(--radius-md, 12px);
+  width: 90%; max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+[data-theme='dark'] .modal-content { background: #1e293b; color: #f8fafc; }
+
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+.form-group input[type="range"] { width: 100%; cursor: pointer; }
+.range-labels { display: flex; justify-content: space-between; font-size: 1.5rem; margin-top: 0.5rem; }
+
+.form-group textarea {
+  width: 100%; padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px; resize: vertical;
+  background: transparent; color: inherit; font-family: inherit;
+}
+
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;
+}
+
+.btn { padding: 0.6rem 1.2rem; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; }
+.btn-primary { background: var(--color-primary); color: white; }
+.btn-secondary { background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border); }
+
+/* --- 5. SKROLLAUSPALKKI --- */
+#weekly-reports-list::-webkit-scrollbar,
+.diary-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#weekly-reports-list::-webkit-scrollbar-thumb,
+.diary-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+}

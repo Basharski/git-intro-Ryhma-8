@@ -1,3 +1,5 @@
+/** Tämän sivun HTML koodia on auttanut kirjoittamaan Googlen Gemini 3 Pro tekoälymalli */
+
 import {
   getPatients,
   getPatientReports,

@@ -29,7 +29,7 @@ const getUserEntries = async (userId) => {
 
 const changeUserEntry = async (userId, data) => {
   const {entryId, mood, workload, message} = data;
-  const sql = `UPDATE user_entries SET mood_score = ?, workload = ?, user_text = ? WHERE user_id = ? AND user_id = ?`;
+  const sql = `UPDATE user_entries SET mood_score = ?, workload = ?, user_text = ? WHERE user_id = ? AND id = ?`;
   const params = [mood, workload, message, userId, entryId];
 
   try {
@@ -43,7 +43,7 @@ const changeUserEntry = async (userId, data) => {
 
 const deleteUserEntry = async (userId, entryId) => {
   const sql = `DELETE FROM user_entries WHERE id = ? AND user_id = ?`;
-  const params = [userId, entryId];
+  const params = [entryId, userId];
 
   try {
     const results = await promisePool.execute(sql, params);

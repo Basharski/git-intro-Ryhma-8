@@ -139,9 +139,9 @@ export async function getWeeklyReports() {
 
 // ── Mieliala / kuormitus ───────────────────────────────────────────────────
 
-/** POST /api/mood – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
+/** POST /api/entry – Tallentaa käyttäjän tunnetilan ja koetun kuormituksen */
 export async function saveMood(mood, workload, message) {
-  return apiFetch('/entry/mood', {
+  return apiFetch('/entry', {
     method: 'POST',
     body: JSON.stringify({mood, workload, message}),
   });
@@ -166,6 +166,26 @@ export async function shareWithProfessional(shareCode) {
 
 export async function revokeProfessionalAccess() {
   return apiFetch('/user/patient/revoke', {
+    method: 'DELETE',
+  });
+}
+
+// ── Käyttäjän omat päiväkirjamerkinnät ─────────────────────────────────────
+export const fetchUserEntries = async () => {
+  return await apiFetch('/entry');
+};
+
+/** PATCH /api/entry/:id - Muokkaa käyttäjän tekemää päiväkirjamarkintää */
+export async function changeUserEntry(entryId, updatedData) {
+  return apiFetch(`/entry/${entryId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(updatedData),
+  });
+}
+
+/** DELETE /api/entry/:id - Poistaa käyttän tekemän päiväkirjamerkinnän */
+export async function deleteUserEntry(entryId) {
+  return apiFetch(`/entry/${entryId}`, {
     method: 'DELETE',
   });
 }
