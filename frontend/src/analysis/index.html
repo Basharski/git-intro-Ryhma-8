@@ -45,13 +45,8 @@
         background: var(--color-surface);
         border-radius: var(--radius-md);
         margin-bottom: 1.5rem;
-
-        /* Vahvempi reuna */
         border: 2px solid var(--color-border);
-
-        /* Lisätään kevyt varjo, joka luo syvyysvaikutelmaa */
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
         transition:
           transform 0.2s ease,
           border-color 0.2s ease,
@@ -92,12 +87,29 @@
       }
 
       .badge {
-        background: var(--color-primary-light);
-        color: white;
-        padding: 2px 8px;
-        border-radius: 12px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 700;
         font-size: 0.75rem;
-        font-weight: 600;
+        display: inline-block;
+      }
+
+      .badge--success {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #10b981;
+      }
+
+      .badge--warning {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fbbf24;
+      }
+
+      .badge--danger {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
       }
 
       .report-item__pro-note {
@@ -121,16 +133,15 @@
       }
 
       #weekly-reports-list {
-        max-height: 400px; /* Sama kuin päiväkirjalla */
+        max-height: 400px;
         overflow-y: auto;
-        padding-right: 0.5rem; /* Tilaa skrollipalkille */
+        padding-right: 0.5rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
         overscroll-behavior: contain;
       }
 
-      /* Tyylitellään skrollipalkki siistimmäksi (toimii Chrome/Safari/Edge) */
       #weekly-reports-list::-webkit-scrollbar {
         width: 6px;
       }
@@ -147,6 +158,20 @@
 
       #weekly-reports-list::-webkit-scrollbar-thumb:hover {
         background: var(--color-primary-light);
+      }
+
+      .text-success {
+        color: var(--color-primary) !important;
+      }
+      .text-warning {
+        color: #f1c40f !important;
+      }
+      .text-danger {
+        color: var(--color-danger) !important;
+      }
+
+      [data-theme='dark'] .text-warning {
+        color: #ffdb4d !important;
       }
     </style>
   </head>
