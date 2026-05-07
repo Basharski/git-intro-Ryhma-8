@@ -4,6 +4,7 @@ import {
   getMeasurements,
   getLatestMeasurement,
 } from '../models/hrv-data-model.js';
+import {getExercises} from '../controllers/exercise-controller.js';
 
 const baseUrl = process.env.KUBIOS_API_URI;
 
@@ -92,18 +93,31 @@ export const getUserInfo = async (req, res, next) => {
   }
 };
 
-export const syncMeasurements = async (req, res, next) => {
+// Synchronizes local database and Kubios
+const syncMeasurements = async (userId, kubiosIdToken) => {
   try {
-    const {kubiosIdToken, userId} = req.user;
-    const count = await performSync(userId, kubiosIdToken);
-
-    res.json({
-      message: 'Sync complete',
-      count: count,
-    });
+    await performSync(userId, kubiosIdToken);
   } catch (err) {
     console.error('syncMeasurements failed:', err);
-    next(err);
+  }
+};
+
+// Syncs Kubios and database, returns latest measurement and personalized exercises
+export const syncAndReturn = async (req, res) => {
+  try {
+    const {userId, kubiosIdToken} = req.user;
+    await syncMeasurements(userId, kubiosIdToken);
+
+    const measurement = await getLatestMeasurement(userId);
+    const recommendations = await getExercises(
+      measurement.readiness,
+      measurement.stress_index,
+    );
+
+    res.json({measurement, recommendations});
+  } catch (err) {
+    console.error('Synchronization error', err);
+    res.status(500).json({error: 'Synchronization failed'});
   }
 };
 
@@ -117,12 +131,12 @@ export const getMeasurementsByUserId = async (req, res, next) => {
   }
 };
 
+// Gets the latest measurements from Kubios and updates the personalized exercises
 export const showLatestMeasurement = async (req, res, next) => {
   try {
-    const {userId, kubiosIdToken} = req.user;
+    const {userId} = req.user;
 
-    await performSync(userId, kubiosIdToken);
-
+    // Get the latest measurement from database
     const measurement = await getLatestMeasurement(userId);
 
     if (!measurement) {
@@ -130,7 +144,14 @@ export const showLatestMeasurement = async (req, res, next) => {
         .status(404)
         .json({message: 'No measurements found after sync'});
     }
-    res.json(measurement);
+
+    // Gets the personalized exercises from database
+    const recommendations = await getExercises(
+      measurement.readiness,
+      measurement.stress_index,
+    );
+
+    res.json({measurement: measurement, recommendations: recommendations});
   } catch (err) {
     console.error('showLatestMeasurement failed:', err);
     next(err);

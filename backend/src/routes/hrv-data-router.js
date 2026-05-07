@@ -1,17 +1,15 @@
 import express from 'express';
 import {authenticateToken} from '../middlewares/authentication.js';
-import {
-  syncMeasurements,
-  getMeasurementsByUserId,
-  showLatestMeasurement,
-} from '../controllers/kubios-data-controller.js';
+import * as KubiosController from '../controllers/kubios-data-controller.js';
 
 const hrvEntryRouter = express.Router();
 
-hrvEntryRouter.get('/data', authenticateToken, getMeasurementsByUserId);
+hrvEntryRouter.use(authenticateToken);
 
-hrvEntryRouter.get('/data/latest', authenticateToken, showLatestMeasurement);
+hrvEntryRouter.get('/data', KubiosController.getMeasurementsByUserId);
 
-hrvEntryRouter.post('/fetch', authenticateToken, syncMeasurements);
+hrvEntryRouter.get('/data/latest', KubiosController.showLatestMeasurement);
+
+hrvEntryRouter.post('/data/sync', KubiosController.syncAndReturn);
 
 export default hrvEntryRouter;

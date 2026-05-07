@@ -116,14 +116,18 @@ export async function getHrvData() {
   return apiFetch('/hrv/data');
 }
 
-/** GET /api/hrv/data/latest - Palauttaa uusimman HRV-mittauksen */
+/** GET /api/hrv/data/latest - Palauttaa uusimman HRV-mittauksen
+ * ja personoidut harjoitteet tietokannasta
+ */
 export async function getLatestHrvData() {
   return apiFetch('/hrv/data/latest');
 }
 
-/** POST /api/hrv/fetch – Käynnistää HRV-datan noudon Kubioksesta */
+/** POST /api/hrv/data/sync – Käynnistää HRV-datan noudon Kubioksesta
+ * Palauttaa viimeisimmän Kubios datan ja personoidut harjoitteet
+ */
 export async function fetchHrvFromKubios() {
-  return apiFetch('/hrv/fetch', {method: 'POST'});
+  return apiFetch('/hrv/data/sync', {method: 'POST'});
 }
 
 // -- Viikottaiset raportit ──────────────────────────────────────────────────
